@@ -1,0 +1,205 @@
+.App {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0 0 60px;
+  font-family: arial;
+  background: linear-gradient(141deg, #0fb8ad 0%, #1fc8db 51%, #2cb5e8 75%);
+  min-height: calc(100vh - 60px);
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.App-header {
+  padding: 20px;
+  max-width: 300px;
+  margin: 0 auto;
+  color: #fff;
+}
+
+.App-intro {
+  font-size: large;
+  max-width: 300px;
+  margin: 0 auto;
+  color: #fff;
+  font-size: 16px;
+}
+
+.App-login {
+  display: flex;
+  margin: 20px auto 0;
+  flex-direction: column;
+  max-width: 300px;
+  width: 100%;
+  color: #fff;
+}
+
+.App-login input,
+input {
+  padding: 8px;
+  margin-bottom: 10px;
+  background-color: transparent;
+  border: 1px solid #fff;
+color: #fff;
+}
+
+.App-login .btn > a,
+.btn > a,
+.btn.signout,
+form button {
+    background: #5ED87C;
+    width: 100%;
+    min-width: 220px;
+    display: block;
+    text-transform: uppercase;
+    width: 300px;
+    padding: 10px 0px;
+    color: #fff;
+    transition:0.3s;
+    cursor: pointer;
+    margin-bottom: 20px;
+    border: none;
+    font-size: 16px;
+}
+
+form {
+  max-width: 300px;
+}
+
+form button:disabled {
+    background: #dddddd;
+}
+
+.App-login .btn.coming-soon > a,
+.btn.coming-soon > a {
+    background: rgba(94, 216, 124, 0.5)!important;
+    pointer-events: none;
+}
+
+.hide {
+    display: none!important;
+}
+
+.App-login .btn > a:hover {
+    background: #39e664;
+}
+
+form input {
+    width: calc(100% - 20px);
+    display: block;
+    margin-bottom: 20px;
+}
+
+p {
+  color: #fff;
+  margin: 5px 0;
+}
+
+a {
+  text-decoration: none;
+  color: #fff;
+}
+
+span {
+  color: #fff;
+}
+
+span.cap {
+    text-transform: capitalize;
+}
+
+.score {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+
+
+.score:first-child,
+.player-score:first-child {
+    margin-top: 30px;
+}
+
+.player-score {
+  color: #fff;
+  margin: 0 0 20px;
+  font-size: 20px;
+  border-bottom: 1px solid #fff;
+  padding-bottom: 5px;
+  text-align: left;
+  min-width: 220px;
+}
+
+.player-score .right {
+    float:right;
+}
+
+.score p {
+  margin-right: 30px;
+}
+
+.score input {
+  margin-bottom: 0!important;
+  padding: 14px 8px;
+  margin-bottom: 10px;
+  background-color: transparent;
+  border: 2px solid #fff;
+  color: #fff;
+  font-size: 16px;
+  text-align: center;
+}
+
+.totalscore {
+    margin-bottom: 30px;
+}
+
+.slider {
+    max-width: 300px;
+    margin: 0 auto 30px;
+}
+
+.slick-slide {
+    width: 300px;
+}
+
+.slick-dots li button::before {
+    color: #fff;
+}
+.slick-dots li.slick-active button:before {
+    color: #fff;
+}
+
+.slider .center {
+    color: #fff;
+    margin: 0 0 10px;
+    font-size: 20px;
+    padding-bottom: 5px;
+    min-width: 300px;
+    text-align: left;
+}
+
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: #fff;
+    opacity: 1; /* Firefox */
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: #fff;
+}
+
+::-ms-input-placeholder { /* Microsoft Edge */
+    color: #fff;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
