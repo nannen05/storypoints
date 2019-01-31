@@ -32,7 +32,12 @@ function PublicRoute ({component: Component, authed, ...rest}) {
       {...rest}
       render={(props) => authed === false
         ? <Component {...props} {...rest} />
-        : <Redirect to={{pathname: '/dashboard', state: {from: props.location}}} />}
+        : <Redirect 
+            to={{
+                pathname: '/dashboard', 
+                state: {from: props.location}
+            }} 
+        />}
     />
   )
 }
