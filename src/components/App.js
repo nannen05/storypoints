@@ -10,13 +10,18 @@ import Register from "./Register";
 import Dashboard from "./Dashboard";
 
 
-function PrivateRoute ({component: Component, authed, user, ...rest}) {
+function PrivateRoute ({component: Component, authed, ...rest}) {
   return (
     <Route
       {...rest}
       render={(props) => authed === true
         ? <Component {...props} {...rest} />
-        : <Redirect to={{pathname: '/login', state: {from: props.location}}} />}
+        : <Redirect 
+            to={{
+                pathname: '/login', 
+                state: {from: props.location}
+            }} 
+        />}
     />
   )
 }
@@ -26,8 +31,8 @@ function PublicRoute ({component: Component, authed, ...rest}) {
     <Route
       {...rest}
       render={(props) => authed === false
-        ? <Component {...props} />
-        : <Redirect to={{pathname: '/dashboard', user: {from: props.location}}} />}
+        ? <Component {...props} {...rest} />
+        : <Redirect to={{pathname: '/dashboard', state: {from: props.location}}} />}
     />
   )
 }
@@ -43,7 +48,7 @@ class App extends Component {
   }
 
   componentDidMount () {
-    this.removeListener = firebase.auth.onAuthStateChanged((user) => {
+    firebase.auth.onAuthStateChanged((user) => {
       if (user) {
         this.props.fetchUser(user.uid)
 
@@ -62,7 +67,7 @@ class App extends Component {
   }
 
   componentWillUnmount () {
-    this.removeListener()
+    //this.removeListener()
   }
   
   render() {
@@ -70,8 +75,8 @@ class App extends Component {
         <BrowserRouter>
             <Switch>
                 <Route exact path="/" component={Home}></Route>
-                <PublicRoute authed={this.state.authed} path='/login' component={Login} />
-                <PublicRoute authed={this.state.authed} path='/register' component={Register} />
+                <PublicRoute authed={this.state.authed} path='/login' component={Login}/>
+                <PublicRoute authed={this.state.authed} path='/register' component={Register} />>
                 <PrivateRoute authed={this.state.authed} path='/dashboard' component={Dashboard} />
             </Switch>
         </BrowserRouter>

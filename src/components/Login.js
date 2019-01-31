@@ -4,7 +4,7 @@ import logo from '../logo.svg';
 import '../App.css';
 import * as actions from "../store/actions";
 import { Link, withRouter } from 'react-router-dom'
-import { auth, db } from '../firebase';
+import { auth, firebase } from '../firebase';
 
 const byPropKey = (propertyName, value) => () => ({
   [propertyName]: value,
@@ -24,7 +24,7 @@ class Login extends Component {
   }
 
   componentDidMount() {
-      console.log(this.props)
+      //console.log(this.props)
   }
 
   onSubmit = (e) => {
@@ -40,9 +40,14 @@ class Login extends Component {
       auth.doSignInWithEmailAndPassword(email, password)
         .then(() => {
           this.setState({ ...INITIAL_STATE });
-          console.log(this)
-          //this.props.fetchUser(user.uid)
-          //history.push("/dashboard");
+
+          firebase.auth.onAuthStateChanged(function(user) {
+            if (user) {
+              alert('logged in')
+              history.push("/dashboard")
+            }
+          })
+
         })
         .catch(error => {
           this.setState(byPropKey('error', error));

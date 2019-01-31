@@ -11,13 +11,14 @@ class DashBoard extends Component {
     constructor(props) {
         super(props);
 
-        // this.state = {
-        //     authUser: null,
-        // };
+        this.state = {
+            user: null
+        };
     }
 
     signOut() {
         auth.doSignOut();
+        alert('signed out')
         this.props.history.push('/')
     }
 
@@ -53,12 +54,11 @@ class DashBoard extends Component {
                 <div className="App-header">
                     <img src={logo} className="App-logo" alt="logo" />
                     <h2>Dashboard</h2>
-                    <p>
-                        {this.props.user.username}
-                    </p>
-                    <p>
-                        {this.props.user.email}
-                    </p>
+                        <p>
+                        {this.props.user && 
+                            this.props.user.username
+                        }
+                        </p>
                     <br/>
                     <div className="btn"><Link to="/"> Home </Link></div>
                     <div className="btn signout" type="button" onClick={this.signOut.bind(this)}>
