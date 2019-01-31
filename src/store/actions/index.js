@@ -1,6 +1,6 @@
-import { FETCH_USER} from "./types";
+import { FETCH_USER, AUTH_USER } from "./types";
 
-import { db } from '../../firebase'
+import { db, firebase } from '../../firebase'
 
 export const fetchUser = (uid) => async dispatch => {
 	db.getCurrentUser(uid).on("value", snapshot => {
@@ -10,5 +10,16 @@ export const fetchUser = (uid) => async dispatch => {
 		})	
 	})
 }
+
+// export const userAuthed = () => {
+// 	firebase.auth.onAuthStateChanged(authUser => {
+// 		if(authUser) {
+// 			dispatch({
+// 				type: AUTH_USER,
+// 				payload: true
+// 			})
+// 		}
+// 	})
+// }
 
 

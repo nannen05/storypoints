@@ -5,14 +5,15 @@ import logo from '../logo.svg';
 import '../App.css';
 import { firebase, auth } from '../firebase';
 import * as actions from "../store/actions";
+import PrivateRoute from "./PrivateRoute";
 
 class DashBoard extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            authUser: null,
-        };
+        // this.state = {
+        //     authUser: null,
+        // };
     }
 
     signOut() {
@@ -20,38 +21,43 @@ class DashBoard extends Component {
         this.props.history.push('/')
     }
 
-    componentDidMount() {
-        firebase.auth.onAuthStateChanged(authUser => {
-            if(!authUser) {
-                this.setState({ authUser: null })
-                this.props.history.push('/login')
-            } else {
-                this.setState({ authUser })
-                this.props.fetchUser(authUser.uid)
-            }
-        });
-    }
+    // componentDidMount() {
+    //     firebase.auth.onAuthStateChanged(authUser => {
+    //         if(!authUser) {
+    //             this.setState({ authUser: null })
+    //         } else {
+    //             this.setState({ authUser })
+    //             this.props.fetchUser(authUser.uid)
+    //         }
+    //     });
+    // }
 
     render() {
-        const {loading, user } = this.props
+        // const {loading, user } = this.props
 
-        if (loading) {
-            return (
-                <div className="App">
-                    <div className="App-header">
-                        <h2>Loading...</h2>
-                    </div>
-                </div>
-            )
-        }
+        // if (loading) {
+        //     return (
+        //         <div className="App">
+        //             <div className="App-header">
+        //                 <h2>Loading...</h2>
+        //             </div>
+        //         </div>
+        //     )
+        // }
+
+        console.log(this.props)
         
         return (
+            
             <div className="App">
                 <div className="App-header">
                     <img src={logo} className="App-logo" alt="logo" />
                     <h2>Dashboard</h2>
                     <p>
-                        {user.username}
+                        {this.props.user.username}
+                    </p>
+                    <p>
+                        {this.props.user.email}
                     </p>
                     <br/>
                     <div className="btn"><Link to="/"> Home </Link></div>
@@ -66,7 +72,6 @@ class DashBoard extends Component {
 
 const mapStateToProps = state => ({
     user: state.userData.user,
-    loading: state.userData.loading
 });
 
-export default withRouter(connect(mapStateToProps, actions)(DashBoard))
+export default withRouter(connect(mapStateToProps, null)(DashBoard))

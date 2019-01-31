@@ -24,7 +24,7 @@ class Login extends Component {
   }
 
   componentDidMount() {
-      
+      console.log(this.props)
   }
 
   onSubmit = (e) => {
@@ -40,7 +40,9 @@ class Login extends Component {
       auth.doSignInWithEmailAndPassword(email, password)
         .then(() => {
           this.setState({ ...INITIAL_STATE });
-          history.push("/dashboard");
+          console.log(this)
+          //this.props.fetchUser(user.uid)
+          //history.push("/dashboard");
         })
         .catch(error => {
           this.setState(byPropKey('error', error));
@@ -100,11 +102,8 @@ class Login extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  console.log(state)
-  return {
-    //DATA
-  };
-};
+const mapStateToProps = state => ({
+  user: state.userData.user,
+});
 
 export default withRouter(connect(mapStateToProps, actions)(Login));
