@@ -6,6 +6,8 @@ import * as actions from "../store/actions";
 
 import Home from "./Home";
 import Login from "./Login";
+import ColorChange from "./ColorChange";
+import Card from "./Card";
 import Register from "./Register";
 import Dashboard from "./Dashboard";
 
@@ -82,6 +84,8 @@ class App extends Component {
                 <Route exact path="/" component={Home}></Route>
                 <PublicRoute authed={this.state.authed} path='/login' component={Login}/>
                 <PublicRoute authed={this.state.authed} path='/register' component={Register} />>
+                <Route path='/color' component={ColorChange}/>
+                <Route path='/card' component={Card}/>
                 <PrivateRoute authed={this.state.authed} path='/dashboard' component={Dashboard} />
             </Switch>
         </BrowserRouter>

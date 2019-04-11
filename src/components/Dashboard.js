@@ -5,7 +5,7 @@ import logo from '../logo.svg';
 import '../App.css';
 import { firebase, auth } from '../firebase';
 import * as actions from "../store/actions";
-import PrivateRoute from "./PrivateRoute";
+//import PrivateRoute from "./PrivateRoute";
 
 class DashBoard extends Component {
     constructor(props) {
