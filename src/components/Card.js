@@ -34,10 +34,8 @@ class Card extends Component {
 
     const socket = socketIOClient(this.state.endpoint);
     socket.on('ADD_CARD', (card) => {
-        this.setState({userCards: [...this.state.userCards, card]});
+        this.setState({userCards: [...this.state.userCards, {user: firebase.auth.email, card}] });
     })
-
-    console.log(this.state.userCards.length)
   }
 
   clearCard = () => {
@@ -54,18 +52,24 @@ class Card extends Component {
 
   sendCard = () => {
     const socket = socketIOClient(this.state.endpoint);
-    socket.emit('SEND_CARD', this.state.selectedCard) // change 'red' to this.state.color
+    socket.emit('SEND_CARD', 
+      {
+        card:this.state.selectedCard, 
+        user: firebase.auth.currentUser.email, 
+        userId: firebase.auth.currentUser.uid
+      }
+    )
   }
 
   createCards = () => {
-      return this.state.cards.map((number) =>
-      <li key={number} onClick={() => this.selectCard(number)}>{number}</li>
+      return this.state.cards.map((number, index) =>
+      <li key={index} onClick={() => this.selectCard(number)}>{number}</li>
         );
   }
 
   renderCards = () => {
-    return this.state.userCards.map((number) =>
-        <li key={number}>{number}</li>
+    return this.state.userCards.map((number, index) =>
+        <li key={index}>{number}</li>
     );
   }
 
@@ -92,14 +96,6 @@ class Card extends Component {
                 Send Card
             </p>
            </div>
-
-           <div>
-           {this.state.userCards.length >= 1
-                ? <ul>{this.renderCards()}</ul>
-                : ""
-           }
-           </div>
-           
         </div>
         <Navigation authUser={this.state.authUser} />
       </div>

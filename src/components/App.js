@@ -10,6 +10,7 @@ import ColorChange from "./ColorChange";
 import Card from "./Card";
 import Register from "./Register";
 import Dashboard from "./Dashboard";
+import StoryBoardRoom from './StoryBoardRoom';
 
 
 function PrivateRoute ({component: Component, authed, ...rest}) {
@@ -86,6 +87,7 @@ class App extends Component {
                 <PublicRoute authed={this.state.authed} path='/register' component={Register} />>
                 <Route path='/color' component={ColorChange}/>
                 <Route path='/card' component={Card}/>
+                <Route path='/story' component={StoryBoardRoom}/>
                 <PrivateRoute authed={this.state.authed} path='/dashboard' component={Dashboard} />
             </Switch>
         </BrowserRouter>
