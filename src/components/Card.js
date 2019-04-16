@@ -17,7 +17,7 @@ class Card extends Component {
       authUser: null,
       cards: ["0", "1/2", "1", "2", "3", "5", "8", "13", "20", "?"],
       userCards: [],
-      selectedCard: "",
+      selectedCard: localStorage.getItem('selectedCard'),
       updateCard: null,
       currentSockets: null,
       endpoint: "http://192.168.1.10:4001",
@@ -50,6 +50,8 @@ class Card extends Component {
         socket.on('ADD_CARD', (card) => {
             this.setState({selectedCard: card.card})
         })
+
+        console.log(this.state.selectedCard)
     }, 1000);
   }
 
@@ -65,30 +67,14 @@ class Card extends Component {
      })
   }
 
-  sendCard = () => {
-
-    this.setState({
-      updateCard: true
-    })
-
-    console.log(this.state)
-
-    const socket = socketIOClient(this.state.endpoint);
-    socket.emit('SEND_CARD', 
-      {
-        card:this.state.selectedCard, 
-        user: firebase.auth.currentUser.email, 
-        userId: firebase.auth.currentUser.uid
-      }
-    )
-  }
-
   updateCard = () => {
 
     this.setState({
       updateCard: true
     })
-    
+
+    localStorage.setItem('selectedCard', this.state.selectedCard);
+
     const socket = socketIOClient(this.state.endpoint);
     socket.emit('UPDATE_CARD', 
       {
