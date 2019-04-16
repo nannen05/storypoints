@@ -17,7 +17,8 @@ class Card extends Component {
       authUser: null,
       cards: ["0", "1/2", "1", "2", "3", "5", "8", "13", "20", "?"],
       userCards: [],
-      selectedCard: null,
+      selectedCard: "",
+      updateCard: null,
       currentSockets: null,
       endpoint: "http://192.168.1.10:4001",
     };
@@ -33,9 +34,23 @@ class Card extends Component {
     });
 
     const socket = socketIOClient(this.state.endpoint);
-    socket.on('ADD_CARD', (card) => {
-        this.setState({userCards: [...this.state.userCards, {user: firebase.auth.email, card}] });
+
+    socket.on('CLEAR_USER_CARD', () => {
+        this.setState({selectedCard: null });
     })
+
+    setTimeout(() => {
+        socket.emit('QUERY_CARD', 
+          {
+            card:this.state.selectedCard, 
+            user: firebase.auth.currentUser.email, 
+            userId: firebase.auth.currentUser.uid
+          }
+        )
+        socket.on('ADD_CARD', (card) => {
+            this.setState({selectedCard: card.card})
+        })
+    }, 1000);
   }
 
   clearCard = () => {
@@ -46,11 +61,18 @@ class Card extends Component {
 
   selectCard = (number) => {
      this.setState({
-         selectedCard: number
+         selectedCard: number,
      })
   }
 
   sendCard = () => {
+
+    this.setState({
+      updateCard: true
+    })
+
+    console.log(this.state)
+
     const socket = socketIOClient(this.state.endpoint);
     socket.emit('SEND_CARD', 
       {
@@ -61,16 +83,48 @@ class Card extends Component {
     )
   }
 
+  updateCard = () => {
+
+    this.setState({
+      updateCard: true
+    })
+    
+    const socket = socketIOClient(this.state.endpoint);
+    socket.emit('UPDATE_CARD', 
+      {
+        card:this.state.selectedCard, 
+        user: firebase.auth.currentUser.email, 
+        userId: firebase.auth.currentUser.uid
+      }
+    )
+  }
+
   createCards = () => {
       return this.state.cards.map((number, index) =>
-      <li key={index} onClick={() => this.selectCard(number)}>{number}</li>
-        );
+        <li key={index} onClick={() => this.selectCard(number)}>{number}</li>
+      );
   }
 
   renderCards = () => {
     return this.state.userCards.map((number, index) =>
         <li key={index}>{number}</li>
     );
+  }
+
+  createUpdateCardBtn = () => {
+    return <div className="btn">
+              <p onClick={() => this.updateCard()}>
+                  Update Card
+              </p>
+            </div>
+  }
+
+  createSendCardBtn = () => {
+    return <div className="btn">
+            <p onClick={() => this.updateCard()}>
+                Send Card
+            </p>
+          </div>
   }
 
   render() {
@@ -85,17 +139,21 @@ class Card extends Component {
             : <p>Select A Card</p>
           }
 
+          <br/>
+
+          {this.state.updateCard
+              ? this.createUpdateCardBtn()
+              : this.createSendCardBtn()
+          }
+
+          <br/>
+
           <div className="btn">
             <p onClick={() => this.clearCard()}>
                 Clear Card
             </p>
           </div>
 
-          <div className="btn">
-            <p onClick={() => this.sendCard()}>
-                Send Card
-            </p>
-           </div>
         </div>
         <Navigation authUser={this.state.authUser} />
       </div>

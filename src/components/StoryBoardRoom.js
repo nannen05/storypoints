@@ -26,8 +26,13 @@ class StoryBoardRoom extends Component {
     });
 
     const socket = socketIOClient(this.state.endpoint);
-    socket.on('ADD_CARD', (card) => {
-          this.addCard(card)
+    // socket.on('ADD_CARD', (card) => {
+    //       this.addCard(card)
+    // })
+
+    socket.on('RENDER_CARDS', (cards) => {
+        console.log(cards)
+        this.setState({userCards: cards})
     })
   }
 
@@ -56,6 +61,18 @@ class StoryBoardRoom extends Component {
       }
   }
 
+  clearCards = () => {
+    const socket = socketIOClient(this.state.endpoint);
+    socket.emit('CLEAR_CARDS')
+    this.setState({
+        userCards: []
+    })
+  }
+
+  startTimer = () => {
+
+  }
+
   renderCards = () => {
     return this.state.userCards.map((number, index) =>
         <li key={index}>{number.card} - {number.user}</li>
@@ -72,9 +89,21 @@ class StoryBoardRoom extends Component {
            <div>
            {this.state.userCards.length > 0
                 ? <ul>{this.renderCards()}</ul>
-                : ""
+                : "Waiting For Users"
            }
            </div>
+
+           <div className="btn">
+            <p onClick={() => this.clearCards()}>
+                Clear Cards<br/>
+            </p>
+           </div>
+
+           <div className="btn">
+            <p onClick={() => this.startTimer()}>
+                Start Timer<br/>
+            </p>
+          </div>
         </div>
       </div>
     );

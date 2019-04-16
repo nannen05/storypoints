@@ -1,47 +1,89 @@
 
 const express = require('express')
 const http = require('http')
+const mongo = require('mongodb').MongoClient;
 const socketIO = require('socket.io')
 
-// our localhost port
 const port = 4001
-
 const app = express()
-
-// our server instance
 const server = http.createServer(app)
-
-// This creates our socket using the instance of the server
 const io = socketIO(server)
 
-// This is what the socket.io syntax is like, we will work this later
+mongo.connect('mongodb://127.0.0.1/', function(err, db){
+    if(err){
+      throw err;
+  }
 
-io.on('connection', socket => {
-  console.log('New client connected')
+  console.log('MongoDB connected...');
+
+  const dbase = db.db("storypoints"); //here
+
+  io.on('connection', socket => {
+    console.log('New client connected')
+
+    const renderCards = () => {
+      dbase.collection("cards").find().sort({userId: 1}).toArray(function(err, res) {
+        if (err) throw err;
+        console.log(res);
+        io.sockets.emit('RENDER_CARDS', res)
+      });
+    }
+
+    const sendCard = () => {
+      socket.on('SEND_CARD', (card) => {
+        dbase.collection("cards").insertOne(card, function(err, res) {
+          if (err) throw err;
+          io.sockets.emit('ADD_CARD', card)
+          renderCards()
+        });
+      })
+    }
+
+    const updateCard = () => {
+      socket.on('UPDATE_CARD', (card) => {
+        const myQuery = { userId: card.userId };
+        const newValue = { $set: {card: card.card} };
+        dbase.collection("cards").updateOne(myQuery, newValue, function(err, res) {
+          if (err) throw err;
+          renderCards()
+          io.sockets.emit('ADD_CARD', card) 
+        });
+      })
+    }
+
+    const clearCards = () => {
+      socket.on('CLEAR_CARDS', () => {
+        dbase.collection("cards").deleteMany({}, function() {
+          io.sockets.emit('CLEAR_USER_CARD')
+        })
+      })
+    }
+
+    const queryCard = () => {
+      socket.on('QUERY_CARD', (card) => {
+        const myQuery = { userId: card.userId };
+        const newValue = { $set: {card: card.card, userId: card.userId, user: card.user} };
+
+        dbase.collection("cards").updateOne(myQuery, newValue, {upsert: true}, function(err, res) {
+          if (err) throw err;
+          console.log('query')
+          io.sockets.emit('ADD_CARD', card) 
+        });
+      })
+    }
+
+    renderCards()
+    sendCard()
+    updateCard()
+    clearCards()
+    queryCard()
   
-  // just like on the client side, we have a socket.on method that takes a callback function
-  socket.on('change color', (color) => {
-    // once we get a 'change color' event from one of our clients, we will send it to the rest of the clients
-    // we make use of the socket.emit method again with the argument given to use from the callback function above
-    console.log('Color Changed to: ', color)
-    io.sockets.emit('change color', color)
-  })
-
-  socket.on('SEND_CARD', (cardNumber) => {
-    console.log(cardNumber)
-    io.sockets.emit('ADD_CARD', cardNumber)
-  })
-
-  //console.log(io)
-
-  //let total = io.engine.clientsCount;
-
-  //socket.emit('getCount',total)
-  
-  // disconnect is fired when a client leaves the server
-  socket.on('disconnect', () => {
-    console.log('user disconnected')
+    socket.on('disconnect', () => {
+      console.log('user disconnected')
+    })
   })
 })
+
+
 
 server.listen(port, () => console.log(`Listening on port ${port}`))
