@@ -31,7 +31,6 @@ class StoryBoardRoom extends Component {
     // })
 
     socket.on('RENDER_CARDS', (cards) => {
-        console.log(cards)
         this.setState({userCards: cards})
     })
   }
@@ -74,9 +73,14 @@ class StoryBoardRoom extends Component {
   }
 
   renderCards = () => {
-    return this.state.userCards.map((number, index) =>
-        <li key={index}>{number.card} - {number.user}</li>
+    const cards =  this.state.userCards.map((number, index) => {
+        if(!!number.card) {
+          return <li key={index}>{number.card} - {number.user}</li>
+        }
+      }       
     );
+
+    return cards
   }
 
   render() {

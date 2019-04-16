@@ -84,6 +84,4 @@ mongo.connect('mongodb://127.0.0.1/', function(err, db){
   })
 })
 
-
-
 server.listen(port, () => console.log(`Listening on port ${port}`))
