@@ -2,7 +2,6 @@ import React, { Component, useState } from 'react';
 import PropTypes from 'prop-types';
 import socketIOClient from "socket.io-client";
 import { connect } from "react-redux";
-import logo from '../logo.svg';
 import bvaLogo from '../bva.svg';
 import '../App.css';
 import * as actions from "../store/actions";
@@ -10,15 +9,11 @@ import { withRouter } from 'react-router-dom'
 import { firebase } from '../firebase';
 import { withSnackbar } from 'notistack';
 
-import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-
-import Navigation from './Navigation'
 
 class UserCard extends Component {
   constructor(props) {

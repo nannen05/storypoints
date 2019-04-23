@@ -95,7 +95,6 @@ class App extends Component {
                   <Route exact path="/" component={Home}></Route>
                   <PublicRoute authed={this.state.authed} path='/login' component={Login}/>
                   <PublicRoute authed={this.state.authed} path='/register' component={Register} />>
-                  <Route path='/color' component={ColorChange}/>
                   <Route path='/card' component={UserCard}/>
                   <Route path='/story' component={StoryBoardRoom}/>
                   <PrivateRoute authed={this.state.authed} path='/dashboard' component={Dashboard} />

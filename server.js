@@ -4,19 +4,26 @@ const http = require('http')
 const mongo = require('mongodb').MongoClient;
 const socketIO = require('socket.io')
 
+require('dotenv').config();
+
 const port = 4001
 const app = express()
 const server = http.createServer(app)
 const io = socketIO(server)
 
-mongo.connect('mongodb://127.0.0.1/', {useNewUrlParser: true}, function(err, db){
+const dbUser = process.env.REACT_APP_DB_USER
+const dbPassword = process.env.REACT_APP_DB_PASSWORD
+
+const uri = "mongodb+srv://" + dbUser + ":" + dbPassword + "@storypoints-6sx8y.mongodb.net/test?retryWrites=true";
+
+mongo.connect(uri, {useNewUrlParser: true}, function(err, db){
     if(err){
       throw err;
   }
-
+  
   console.log('MongoDB connected...');
 
-  const dbase = db.db("storypoints"); //here
+  const dbase = db.db("storypoints_db");
 
   io.on('connection', socket => {
     console.log('New client connected')
@@ -61,6 +68,7 @@ mongo.connect('mongodb://127.0.0.1/', {useNewUrlParser: true}, function(err, db)
 
     const queryCard = () => {
       socket.on('QUERY_CARD', (card) => {
+        console.log('query')
         const myQuery = { userId: card.userId };
         const newValue = { $set: {card: card.card, userId: card.userId, user: card.user} };
 
