@@ -9,7 +9,7 @@ const app = express()
 const server = http.createServer(app)
 const io = socketIO(server)
 
-mongo.connect('mongodb://127.0.0.1/', function(err, db){
+mongo.connect('mongodb://127.0.0.1/', {useNewUrlParser: true}, function(err, db){
     if(err){
       throw err;
   }

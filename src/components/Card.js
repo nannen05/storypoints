@@ -1,15 +1,26 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
+import PropTypes from 'prop-types';
 import socketIOClient from "socket.io-client";
 import { connect } from "react-redux";
 import logo from '../logo.svg';
+import bvaLogo from '../bva.svg';
 import '../App.css';
 import * as actions from "../store/actions";
 import { withRouter } from 'react-router-dom'
 import { firebase } from '../firebase';
+import { withSnackbar } from 'notistack';
+
+import { withStyles } from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 
 import Navigation from './Navigation'
 
-class Card extends Component {
+class UserCard extends Component {
   constructor(props) {
     super(props);
 
@@ -59,12 +70,21 @@ class Card extends Component {
       this.setState({
           selectedCard: null
       })
+
+      const message = 'Cleared Card'
+      this.props.enqueueSnackbar(message, {
+         variant: 'warning',
+       });
   }
 
   selectCard = (number) => {
      this.setState({
          selectedCard: number,
      })
+     const message = 'Selected ' + number
+     this.props.enqueueSnackbar(message, {
+        variant: 'info',
+      });
   }
 
   updateCard = () => {
@@ -72,6 +92,11 @@ class Card extends Component {
     this.setState({
       updateCard: true
     })
+
+    const message = 'Sent ' + this.state.selectedCard
+    this.props.enqueueSnackbar(message, {
+       variant: 'success',
+     });
 
     localStorage.setItem('selectedCard', this.state.selectedCard);
 
@@ -85,9 +110,35 @@ class Card extends Component {
     )
   }
 
+  simpleCard = (number, index) => {
+      return (
+        <Card 
+          className={this.state.currentCard ? "card__item active" : "card__item"} 
+          key={index}
+          data-card={index}
+          onClick={() => this.selectCard(number)}>
+          <CardContent className="card__content">
+            <Typography variant="h5" component="h1" className="card__item--top">
+              {number}
+            </Typography>
+            <CardMedia
+              className="card__logo"
+              image={bvaLogo}
+              title="Card Logo"
+            />
+            <Typography variant="h5" component="h1" className="card__item--bottom">
+              {number}
+            </Typography>
+          </CardContent>
+
+        </Card>
+      )
+  }
+
   createCards = () => {
       return this.state.cards.map((number, index) =>
-        <li key={index} onClick={() => this.selectCard(number)}>{number}</li>
+          this.simpleCard(number, index)
+        //<li key={index} onClick={() => this.selectCard(number)}>{number}</li>
       );
   }
 
@@ -99,17 +150,17 @@ class Card extends Component {
 
   createUpdateCardBtn = () => {
     return <div className="btn">
-              <p onClick={() => this.updateCard()}>
+              <Button size="large" onClick={() => this.updateCard()}>
                   Update Card
-              </p>
+              </Button>
             </div>
   }
 
   createSendCardBtn = () => {
     return <div className="btn">
-            <p onClick={() => this.updateCard()}>
+              <Button size="large" onClick={() => this.updateCard()}>
                 Send Card
-            </p>
+              </Button>
           </div>
   }
 
@@ -117,34 +168,32 @@ class Card extends Component {
     return (
       <div className="App">
         <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
           <h2>Cards</h2>
-          <ul>{this.createCards()}</ul>
-          {this.state.selectedCard
-            ? <p>You Selected {this.state.selectedCard}</p>
-            : <p>Select A Card</p>
-          }
-
-          <br/>
-
-          {this.state.updateCard
-              ? this.createUpdateCardBtn()
-              : this.createSendCardBtn()
-          }
-
-          <br/>
-
-          <div className="btn">
-            <p onClick={() => this.clearCard()}>
-                Clear Card
-            </p>
-          </div>
-
         </div>
-        <Navigation authUser={this.state.authUser} />
+
+        <div className="card">
+          <ul className="card__list">{this.createCards()}</ul>
+
+          <div className="card__buttons">
+          {this.state.updateCard
+                ? this.createUpdateCardBtn()
+                : this.createSendCardBtn()
+            }
+
+            <div className="btn">
+              <Button size="large" onClick={() => this.clearCard()}>
+              Clear Card
+              </Button>
+            </div>    
+          </div>
+        </div>
       </div>
     );
   }
 }
 
-export default withRouter(connect(null, actions)(Card));
+UserCard.propTypes = {
+  enqueueSnackbar: PropTypes.func.isRequired,
+}
+
+export default withRouter(connect(null, actions)(withSnackbar(UserCard)));

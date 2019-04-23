@@ -4,13 +4,17 @@ import { Route, BrowserRouter, Link, Redirect, Switch, withRouter } from 'react-
 import { firebase, auth } from '../firebase';
 import * as actions from "../store/actions";
 
+import { SnackbarProvider } from 'notistack';
+
 import Home from "./Home";
 import Login from "./Login";
 import ColorChange from "./ColorChange";
-import Card from "./Card";
+import UserCard from "./Card";
 import Register from "./Register";
 import Dashboard from "./Dashboard";
 import StoryBoardRoom from './StoryBoardRoom';
+
+import SideBar from "./SideBar";
 
 
 function PrivateRoute ({component: Component, authed, ...rest}) {
@@ -80,17 +84,24 @@ class App extends Component {
   
   render() {
     return this.props.loading === true ? <h1>Loading</h1> : (
-        <BrowserRouter>
-            <Switch>
-                <Route exact path="/" component={Home}></Route>
-                <PublicRoute authed={this.state.authed} path='/login' component={Login}/>
-                <PublicRoute authed={this.state.authed} path='/register' component={Register} />>
-                <Route path='/color' component={ColorChange}/>
-                <Route path='/card' component={Card}/>
-                <Route path='/story' component={StoryBoardRoom}/>
-                <PrivateRoute authed={this.state.authed} path='/dashboard' component={Dashboard} />
-            </Switch>
-        </BrowserRouter>
+      <SnackbarProvider maxSnack={3} 
+        anchorOrigin={{
+        vertical: 'top',
+        horizontal: 'right',
+        }}>
+        <SideBar/>
+          <BrowserRouter>
+              <Switch>
+                  <Route exact path="/" component={Home}></Route>
+                  <PublicRoute authed={this.state.authed} path='/login' component={Login}/>
+                  <PublicRoute authed={this.state.authed} path='/register' component={Register} />>
+                  <Route path='/color' component={ColorChange}/>
+                  <Route path='/card' component={UserCard}/>
+                  <Route path='/story' component={StoryBoardRoom}/>
+                  <PrivateRoute authed={this.state.authed} path='/dashboard' component={Dashboard} />
+              </Switch>
+          </BrowserRouter>
+        </SnackbarProvider>
     );
   }
 }

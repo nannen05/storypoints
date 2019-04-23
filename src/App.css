@@ -8,6 +8,8 @@
   font-family: arial;
   background: linear-gradient(141deg, #0fb8ad 0%, #1fc8db 51%, #2cb5e8 75%);
   min-height: calc(100vh - 60px);
+  width: calc(100vw - 260px);
+  transform: translateX(260px);
 }
 
 .App-logo {
@@ -95,6 +97,21 @@ form input {
     margin-bottom: 20px;
 }
 
+h2 {
+    font-size: 18px;
+    text-align: left;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-weight: 400;
+    line-height: 30px;
+    text-transform: uppercase;
+    text-decoration: none;
+    margin: 0;
+}
+
+ul {
+    padding: 0;
+}
+
 p {
   color: #fff;
   margin: 5px 0;
@@ -111,6 +128,14 @@ span {
 
 span.cap {
     text-transform: capitalize;
+}
+
+button {
+    background-color: #0fb8ad!important;
+}
+
+button:hover {
+    background-color: rgba(0, 0, 0, 0.18)!important;
 }
 
 .score {
@@ -202,4 +227,139 @@ span.cap {
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+
+.sidebar {
+    width: 260px;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 260px;
+    border: none;
+    bottom: 0;
+    z-index: 1;
+    position: fixed;
+    box-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.42), 0 4px 25px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2);
+}
+
+.sidebar__bg {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    display: block;
+    position: absolute;
+    background-size: cover;
+    background-position: center center;
+    background: url(https://demos.creative-tim.com/material-dashboard-react/static/media/sidebar-4.fc9cb053.jpg)
+}
+
+.sidebar__bg:before {
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    content: "";
+    display: block;
+    opacity: .8;
+    position: absolute;
+    background: #000;
+}
+
+.sidebar__bg:after {
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+    content: "";
+    display: block;
+    opacity: .2;
+    position: absolute;
+    background: #000;
+    background: linear-gradient(141deg, #0fb8ad 0%, #1fc8db 51%, #2cb5e8 75%)
+}
+
+.sidebar .header {
+    padding: 15px 15px;
+    z-index: 4;
+    position: relative;
+}
+
+.sidebar .header a {
+    padding: 5px 0;
+    display: block;
+    font-size: 18px;
+    text-align: left;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-weight: 400;
+    line-height: 30px;
+    text-transform: uppercase;
+    text-decoration: none;
+    background-color: transparent;
+    color: #fff;
+}
+
+.sidebar .logo {
+    width: 30px;
+    display: inline-block;
+    max-height: 30px;
+    margin-left: 10px;
+    margin-right: 15px;
+}
+
+.sidebar .logo img {
+    top: -5px;
+    width: 35px;
+    border: 0;
+    position: absolute;
+    vertical-align: middle;
+}
+
+.card {
+    width: 90%;
+    margin: 0 auto;
+}
+
+.card ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.card__item {
+    width: 16%;
+    margin: 1%;
+    cursor: pointer
+}
+
+.card__item.active {
+    box-shadow: inset 0px 0px 15px 0px rgba(0,0,0,0.7), 0px 0px 0px 0px rgba(0,0,0,0.54), 0px 0px 0px 0px rgba(0,0,0,0.5)
+}
+
+.card__item--top {
+    text-align: right;
+    padding: 0 0 75px;
+}
+
+.card__item--bottom {
+    text-align: left;
+    padding: 75px 0 0;
+}
+
+.card__content {
+    padding: 10px!important;
+}
+
+.card__logo {
+    height: 20px;
+    background-size: contain!important;
+}
+
+.card__buttons {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    max-width: 300px;
+    margin: 0 auto;
 }
