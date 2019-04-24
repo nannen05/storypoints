@@ -41,7 +41,7 @@ class UserCard extends Component {
     });
 
     //const socket = socketIOClient(window.location.hostname + ':' + (process.env.PORT || 4001));
-    const socket = socketIOClient.connect(window.location.hostname + ':' + (process.env.PORT || 4001))
+    const socket = socketIOClient.connect(window.location.host + ':' + (process.env.PORT || 4001))
 
     console.log(socket)
 
