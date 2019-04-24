@@ -42,6 +42,9 @@ class UserCard extends Component {
 
     const socket = socketIOClient(window.location.hostname + ':' + (process.env.PORT || 4001));
 
+    console.log(window.location.hostname + ':' + (process.env.PORT || 4001))
+
+
     socket.on('CLEAR_USER_CARD', () => {
         this.setState({selectedCard: null });
     })

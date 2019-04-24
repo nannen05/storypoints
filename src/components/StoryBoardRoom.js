@@ -30,6 +30,8 @@ class StoryBoardRoom extends Component {
     //       this.addCard(card)
     // })
 
+    console.log(window.location.hostname + ':' + (process.env.PORT || 4001))
+
     socket.on('RENDER_CARDS', (cards) => {
         this.setState({userCards: cards})
     })
