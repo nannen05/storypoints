@@ -41,7 +41,12 @@ class UserCard extends Component {
     });
 
     //const socket = socketIOClient(window.location.hostname + ':' + (process.env.PORT || 4001));
-    const socket = socketIOClient.connect(window.location.host + ':' + (process.env.PORT || 4001))
+    const socket = socketIOClient('https://protected-bastion-46350.herokuapp.com', {
+      transports: ['websocket'], 
+      jsonp: false 
+    }); 
+
+    socket.connect()
 
     console.log(socket)
 

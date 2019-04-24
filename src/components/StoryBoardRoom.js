@@ -26,7 +26,13 @@ class StoryBoardRoom extends Component {
     });
 
     //const socket = socketIOClient();
-    const socket = socketIOClient.connect(window.location.host + ':' + (process.env.PORT || 4001))
+    //const socket = socketIOClient.connect(window.location.host + ':' + (process.env.PORT || 4001))
+    const socket = socketIOClient('https://protected-bastion-46350.herokuapp.com', {
+      transports: ['websocket'], 
+      jsonp: false 
+    }); 
+
+    socket.connect()
 
     // socket.on('ADD_CARD', (card) => {
     //       this.addCard(card)
