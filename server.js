@@ -1,5 +1,5 @@
 
-const express = require('express')
+//const express = require('express')
 const http = require('http')
 const mongo = require('mongodb').MongoClient;
 const socketIO = require('socket.io')
@@ -7,11 +7,15 @@ const socketIO = require('socket.io')
 require('dotenv').config();
 
 const port = process.env.PORT || 4001
-const app = express()
-const path = require('path');
-const server = http.createServer(app).listen(port)
+//const app = express()
+//const path = require('path');
+//const server = http.createServer(app).listen(port)
 //const io = socketIO(server, { transports: ['websocket'] } )
-const io = socketIO(server)
+//const io = socketIO(server)
+
+var express = require('express'),
+    app = http.createServer(express()),
+    io = require('socket.io').listen(app);
 
 const dbUser = process.env.REACT_APP_DB_USER
 const dbPassword = process.env.REACT_APP_DB_PASSWORD
@@ -111,4 +115,7 @@ mongo.connect(uri, {useNewUrlParser: true}, function(err, db){
   })
 })
 
-server.listen(port, () => console.log(`Listening on port ${port}`))
+app.listen(port, () => {
+  console.log(`Listening on port ${port}`)
+  console.log("Express server listening on port %d in %s mode", app.address().port, )
+})
