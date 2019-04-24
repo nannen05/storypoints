@@ -26,7 +26,8 @@ class UserCard extends Component {
       selectedCard: localStorage.getItem('selectedCard'),
       updateCard: null,
       currentSockets: null,
-      endpoint: "http://192.168.1.10:4001",
+      //endpoint: "http://192.168.1.10:4001",
+      endpoint: "172.20.10.6:4001",
     };
 
     this.selectCard = this.selectCard.bind(this)
@@ -39,7 +40,7 @@ class UserCard extends Component {
         : this.setState({ authUser: null });
     });
 
-    const socket = socketIOClient(this.state.endpoint);
+    const socket = socketIOClient(window.location.hostname + ':4001');
 
     socket.on('CLEAR_USER_CARD', () => {
         this.setState({selectedCard: null });

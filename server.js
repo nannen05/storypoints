@@ -6,10 +6,10 @@ const socketIO = require('socket.io')
 
 require('dotenv').config();
 
-const port = 4001
+const port = process.env.PORT || 4001
 const app = express()
 const server = http.createServer(app)
-const io = socketIO(server)
+const io = socketIO(server).listen(server)
 
 const dbUser = process.env.REACT_APP_DB_USER
 const dbPassword = process.env.REACT_APP_DB_PASSWORD
@@ -20,7 +20,7 @@ mongo.connect(uri, {useNewUrlParser: true}, function(err, db){
     if(err){
       throw err;
   }
-  
+
   console.log('MongoDB connected...');
 
   const dbase = db.db("storypoints_db");

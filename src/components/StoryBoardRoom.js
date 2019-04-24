@@ -25,7 +25,7 @@ class StoryBoardRoom extends Component {
         : this.setState({ authUser: null });
     });
 
-    const socket = socketIOClient(this.state.endpoint);
+    const socket = socketIOClient(window.location.hostname + ':4001');
     // socket.on('ADD_CARD', (card) => {
     //       this.addCard(card)
     // })
@@ -61,7 +61,7 @@ class StoryBoardRoom extends Component {
   }
 
   clearCards = () => {
-    const socket = socketIOClient(this.state.endpoint);
+    const socket = socketIOClient(window.location.hostname + ':4001');
     socket.emit('CLEAR_CARDS')
     this.setState({
         userCards: []
