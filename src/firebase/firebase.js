@@ -20,11 +20,11 @@ const config = {
 
 const FIREBASE_APP = firebase.initializeApp(config);
 
-const db = FIREBASE_APP.database()
+//const db = FIREBASE_APP.database()
 
 const auth = FIREBASE_APP.auth();
 
 export {
-  db,
+  //db,
   auth,
 };
