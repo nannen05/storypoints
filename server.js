@@ -8,13 +8,32 @@ require('dotenv').config();
 
 const port = process.env.PORT || 4001
 const app = express()
-const server = http.createServer(app)
-const io = socketIO(server).listen(server)
+const path = require('path');
+const server = http.createServer(app).listen(port)
+//const io = socketIO(server, { transports: ['websocket'] } )
+const io = socketIO(server)
 
 const dbUser = process.env.REACT_APP_DB_USER
 const dbPassword = process.env.REACT_APP_DB_PASSWORD
 
 const uri = "mongodb+srv://" + dbUser + ":" + dbPassword + "@storypoints-6sx8y.mongodb.net/test?retryWrites=true";
+
+//Static file declaration
+// app.use(express.static(path.join(__dirname, 'client/build')));
+
+// //production mode
+// if(process.env.NODE_ENV === 'production') {
+//   app.use(express.static(path.join(__dirname, 'client/build')));
+//   //
+//   app.get('*', (req, res) => {
+//     res.sendfile(path.join(__dirname = 'client/build/index.html'));
+//   })
+// }
+// //build mode
+// app.get('*', (req, res) => {
+//   res.sendFile(path.join(__dirname+'/public/index.html'));
+// })
+
 
 mongo.connect(uri, {useNewUrlParser: true}, function(err, db){
     if(err){

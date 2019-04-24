@@ -40,7 +40,7 @@ class UserCard extends Component {
         : this.setState({ authUser: null });
     });
 
-    const socket = socketIOClient(window.location.hostname + ':4001');
+    const socket = socketIOClient(window.location.hostname + ':' + (process.env.PORT || 4001));
 
     socket.on('CLEAR_USER_CARD', () => {
         this.setState({selectedCard: null });
