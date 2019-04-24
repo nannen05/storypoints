@@ -34,6 +34,10 @@ class StoryBoardRoom extends Component {
 
     socket.connect()
 
+    socket.on('connect', () => { 
+      console.log('connected to socket server'); 
+    });
+
     // socket.on('ADD_CARD', (card) => {
     //       this.addCard(card)
     // })

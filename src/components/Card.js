@@ -48,8 +48,9 @@ class UserCard extends Component {
 
     socket.connect()
 
-    console.log(socket)
-
+    socket.on('connect', () => { 
+      console.log('connected to socket server'); 
+    });
 
     socket.on('CLEAR_USER_CARD', () => {
         this.setState({selectedCard: null });
