@@ -25,7 +25,9 @@ class StoryBoardRoom extends Component {
         : this.setState({ authUser: null });
     });
 
-    const socket = socketIOClient(window.location.hostname + ':' + (process.env.PORT || 4001));
+    //const socket = socketIOClient();
+    const socket = socketIOClient.connect(window.location.hostname + ':' + (process.env.PORT || 4001))
+
     // socket.on('ADD_CARD', (card) => {
     //       this.addCard(card)
     // })

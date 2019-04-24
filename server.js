@@ -18,7 +18,7 @@ const server = express()
 //server.use((req, res) => res.sendFile(INDEX) )
 //server.listen(port, () => console.log(`Listening on port ${port}`))
 //const io = socketIO(server, { transports: ['websocket'] } )
-const io = socketIO(server)
+const io = socketIO.listen(server)
 
 const dbUser = process.env.REACT_APP_DB_USER
 const dbPassword = process.env.REACT_APP_DB_PASSWORD
