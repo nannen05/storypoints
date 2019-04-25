@@ -9,15 +9,8 @@ require('dotenv').config();
 const port = process.env.PORT || 4001
 const app = express()
 const path = require('path');
-//const server = http.createServer(app)
+const server = http.createServer(app)
 
-const server = express()
-    .use((req, res) => res.sendFile(INDEX) )
-    .listen(port, () => console.log(`Listening on port ${port}`));
-
-//server.use((req, res) => res.sendFile(INDEX) )
-//server.listen(port, () => console.log(`Listening on port ${port}`))
-//const io = socketIO(server, { transports: ['websocket'] } )
 const io = socketIO.listen(server)
 
 const dbUser = process.env.REACT_APP_DB_USER
@@ -101,4 +94,6 @@ mongo.connect(uri, {useNewUrlParser: true}, function(err, db){
   })
 });
 
-
+server.listen(port, () => {
+  console.log('server started and listening on port ' + port);
+});
