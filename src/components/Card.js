@@ -28,7 +28,8 @@ class UserCard extends Component {
       currentSockets: null,
       //endpoint: "http://192.168.1.10:4001",
       //endpoint: "172.20.10.6:4001",
-      endpoint: process.env.REACT_APP_HEROKU_URL || process.env.REACT_APP_CURRENT_IP + ':4001'
+      endpoint: process.env.REACT_APP_HEROKU_URL || process.env.REACT_APP_CURRENT_IP,
+      enpointPort: process.env.PORT || 4001
     };
 
     this.selectCard = this.selectCard.bind(this)
@@ -43,11 +44,13 @@ class UserCard extends Component {
 
     //const socket = socketIOClient(window.location.hostname + ':' + (process.env.PORT || 4001));
     //const socket = socketIOClient('https://protected-bastion-46350.herokuapp.com', {
-    const url = this.state.endpoint
+    const url = this.state.endpoint + ':' + this.state.enpointPort
     const socket = socketIOClient(url, {
       transports: ['websocket'], 
       jsonp: false 
     }); 
+
+    console.log(url)
 
     socket.connect()
 
@@ -111,11 +114,13 @@ class UserCard extends Component {
 
     //const socket = socketIOClient(this.state.endpoint);
     
-    const url = this.state.endpoint
+    const url = this.state.endpoint + ':' + this.state.enpointPort
     const socket = socketIOClient(url, {
       transports: ['websocket'], 
       jsonp: false 
     }); 
+
+    console.log(url)
 
     socket.emit('UPDATE_CARD', 
       {

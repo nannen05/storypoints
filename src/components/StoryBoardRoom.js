@@ -15,7 +15,8 @@ class StoryBoardRoom extends Component {
       authUser: null,
       userCards: [],
       //endpoint: "http://192.168.1.10:4001",
-      endpoint: process.env.REACT_APP_HEROKU_URL || process.env.REACT_APP_CURRENT_IP + ':4001'
+      endpoint: process.env.REACT_APP_HEROKU_URL || process.env.REACT_APP_CURRENT_IP,
+      enpointPort: process.env.PORT || 4001
     };
   }
 
@@ -29,7 +30,7 @@ class StoryBoardRoom extends Component {
     //const socket = socketIOClient();
     //const socket = socketIOClient.connect(window.location.host + ':' + (process.env.PORT || 4001))
     //const socket = socketIOClient('https://protected-bastion-46350.herokuapp.com', {
-    const url = this.state.endpoint
+      const url = this.state.endpoint + ':' + this.state.enpointPort
     const socket = socketIOClient(url, {
         transports: ['websocket'], 
         jsonp: false 
