@@ -8,14 +8,13 @@ import { SnackbarProvider } from 'notistack';
 
 import Home from "./Home";
 import Login from "./Login";
-import ColorChange from "./ColorChange";
 import UserCard from "./Card";
 import Register from "./Register";
 import Dashboard from "./Dashboard";
 import StoryBoardRoom from './StoryBoardRoom';
 
 import SideBar from "./SideBar";
-
+import socket from './socket'
 
 function PrivateRoute ({component: Component, authed, ...rest}) {
   return (
@@ -51,12 +50,24 @@ function PublicRoute ({component: Component, authed, ...rest}) {
 
 class App extends Component {
    constructor(props) {
-        super(props);
+      super(props);
 
-        this.state = {
-            authed: false,
-            loading: true,
-        };
+      this.state = {
+          authed: false,
+          loading: true,
+          client: socket(),
+          rooms: null
+      };
+      
+      this.getRoomList = this.getRoomList.bind(this)
+
+      this.getRoomList();
+  }
+    
+  getRoomList = () => {
+    this.state.client.getRooms((err, rooms) => {
+      this.setState({ rooms: rooms })
+    })
   }
 
   componentDidMount () {
@@ -81,7 +92,13 @@ class App extends Component {
   componentWillUnmount () {
     //this.removeListener()
   }
-  
+
+  renderStoryBoardRoom(room, props) {
+      return (
+          <StoryBoardRoom room={room}/>
+      )
+  }
+   
   render() {
     return this.props.loading === true ? <h1>Loading</h1> : (
       <SnackbarProvider maxSnack={3} 
@@ -89,16 +106,35 @@ class App extends Component {
         vertical: 'top',
         horizontal: 'right',
         }}>
-        <SideBar/>
           <BrowserRouter>
-              <Switch>
-                  <Route exact path="/" component={Home}></Route>
-                  <PublicRoute authed={this.state.authed} path='/login' component={Login}/>
-                  <PublicRoute authed={this.state.authed} path='/register' component={Register} />>
-                  <Route path='/story/:team/card' component={UserCard}/>
-                  <Route path='/story/:team' component={StoryBoardRoom}/>
-                  <PrivateRoute authed={this.state.authed} path='/dashboard' component={Dashboard} />
-              </Switch>
+              <div>
+                <SideBar/>
+                {
+                  !this.state.rooms
+                    ? 'Loading..'
+                    : (
+                      <Switch>
+                        <Route exact path="/" component={Home}></Route>
+                        <PublicRoute authed={this.state.authed} path='/login' component={Login}/>
+                        <PublicRoute authed={this.state.authed} path='/register' component={Register} />
+                        <PrivateRoute authed={this.state.authed} path='/dashboard' component={Dashboard} />
+                        <Route path='/story/:team/card' component={UserCard}/>
+                        {
+                          this.state.rooms.map(room => (
+                            <Route
+                              key={room.name}
+                              exact
+                              path={`/story/${room.name}`}
+                              render={
+                                props => this.renderStoryBoardRoom(room, props)
+                              }
+                            />
+                          ))
+                        }
+                      </Switch>
+                    )
+                }
+              </div>
           </BrowserRouter>
         </SnackbarProvider>
     );

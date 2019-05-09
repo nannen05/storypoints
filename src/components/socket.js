@@ -20,10 +20,15 @@ export default function () {
     socket.emit('GET_ROOMS', null, cb)
   }
 
+  function join(storyRoomName, cb) {
+    socket.emit('JOIN', storyRoomName, cb)
+  }
+
   return {
     queryCard,
     updateCard,
     renderCards,
-    getRooms
+    getRooms,
+    join
   }
 }

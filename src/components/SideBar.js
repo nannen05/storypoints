@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link, withRouter } from 'react-router-dom';
 import socket from './socket'
 
 import logo from '../logo.svg';
@@ -64,6 +65,7 @@ class Sidebar extends Component {
                     <li 
                       key={room.name}
                     >
+                      <Link to={`/story/${room.name}`}></Link>
                       <img src={room.image}/>
                       <span>{room.name}</span>
                     </li>
@@ -78,4 +80,4 @@ class Sidebar extends Component {
   }
 }
 
-export default Sidebar;
+export default withRouter(Sidebar);

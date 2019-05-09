@@ -261,6 +261,14 @@ button:hover {
     padding: 0 0 15px;
 }
 
+.sidebar__list a {
+    width: 100%;
+    position: absolute;
+    height: 100%;
+    left: 0;
+    top: 0;
+}
+
 .sidebar__list img {
     width: 50px;
     max-width: 50px;
