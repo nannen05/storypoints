@@ -1,17 +1,16 @@
-
 const express = require('express')
 const http = require('http')
 const mongo = require('mongodb').MongoClient;
 const socketIO = require('socket.io')
 
+const handlers = require('./src/server/handlers')
+
 require('dotenv').config();
 
-const port = process.env.PORT || 4001
+const port = 3001
 const app = express()
-const path = require('path');
 const server = http.createServer(app)
-
-const io = socketIO.listen(server)
+const io = socketIO(server)
 
 const dbUser = process.env.REACT_APP_DB_USER
 const dbPassword = process.env.REACT_APP_DB_PASSWORD
@@ -30,11 +29,20 @@ mongo.connect(uri, {useNewUrlParser: true}, function(err, db){
   io.on('connection', socket => {
     console.log('New client connected')
 
+    const { 
+      handleGetRooms,
+      handleRenderCards 
+    } = handlers(dbase);
+
+    socket.on('GET_ROOMS', handleGetRooms);
+
+    socket.on('RENDER_NEW_CARDS', handleRenderCards);
+
     const renderCards = () => {
       dbase.collection("cards").find().sort({userId: 1}).toArray(function(err, res) {
         if (err) throw err;
         console.log(res);
-        io.sockets.emit('RENDER_CARDS', res)
+        //io.sockets.emit('RENDER_CARDS', res)
       });
     }
 

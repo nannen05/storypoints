@@ -9,6 +9,8 @@ import { withRouter } from 'react-router-dom'
 import { firebase } from '../firebase';
 import { withSnackbar } from 'notistack';
 
+import socket from './socket'
+
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
@@ -24,12 +26,13 @@ class UserCard extends Component {
       cards: ["0", "1/2", "1", "2", "3", "5", "8", "13", "20", "?"],
       userCards: [],
       selectedCard: localStorage.getItem('selectedCard'),
+      client: socket(),
       updateCard: null,
       currentSockets: null,
       //endpoint: "http://192.168.1.10:4001",
       //endpoint: "172.20.10.6:4001",
       endpoint: process.env.REACT_APP_HEROKU_URL || process.env.REACT_APP_CURRENT_IP,
-      enpointPort: process.env.PORT || 4001
+      enpointPort: process.env.PORT || 3001
     };
 
     this.selectCard = this.selectCard.bind(this)
@@ -44,8 +47,10 @@ class UserCard extends Component {
 
     //const socket = socketIOClient(window.location.hostname + ':' + (process.env.PORT || 4001));
     //const socket = socketIOClient('https://protected-bastion-46350.herokuapp.com', {
-    const url = this.state.endpoint + ':' + this.state.enpointPort
+    //const url = this.state.endpoint + ':' + this.state.enpointPort
+    const url = 'http://127.0.0.1:3001'
     const socket = socketIOClient(url, {
+      forceNew: true,
       transports: ['websocket'], 
       jsonp: false 
     }); 
@@ -63,13 +68,12 @@ class UserCard extends Component {
     })
 
     setTimeout(() => {
-        socket.emit('QUERY_CARD', 
-          {
-            card:this.state.selectedCard, 
-            user: firebase.auth.currentUser.email, 
-            userId: firebase.auth.currentUser.uid
-          }
-        )
+        this.state.client.queryCard({
+          card:this.state.selectedCard, 
+          user: firebase.auth.currentUser.email, 
+          userId: firebase.auth.currentUser.uid
+        })
+
         socket.on('ADD_CARD', (card) => {
             this.setState({selectedCard: card.card})
         })
@@ -112,23 +116,11 @@ class UserCard extends Component {
 
     localStorage.setItem('selectedCard', this.state.selectedCard);
 
-    //const socket = socketIOClient(this.state.endpoint);
-    
-    const url = this.state.endpoint + ':' + this.state.enpointPort
-    const socket = socketIOClient(url, {
-      transports: ['websocket'], 
-      jsonp: false 
-    }); 
-
-    console.log(url)
-
-    socket.emit('UPDATE_CARD', 
-      {
-        card:this.state.selectedCard, 
-        user: firebase.auth.currentUser.email, 
-        userId: firebase.auth.currentUser.uid
-      }
-    )
+    this.state.client.updateCard({ 
+      card:this.state.selectedCard, 
+      user: firebase.auth.currentUser.email, 
+      userId: firebase.auth.currentUser.uid
+    })
   }
 
   simpleCard = (number, index) => {

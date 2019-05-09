@@ -1,4 +1,5 @@
-import React from "react";
+import React, { Component } from 'react';
+import socket from './socket'
 
 import logo from '../logo.svg';
 
@@ -13,52 +14,68 @@ import Icon from "@material-ui/core/Icon";
 // core components
 
 
-const Sidebar = ({ ...props }) => {
+class Sidebar extends Component {
+  constructor(props) {
+    super(props);
 
-  const brand = (
-    <div className="header">
-      <a
-        href="#"
-        className=""
-      >
-        <div className="logo">
-          <img src={logo} className="App-logo" alt="logo" />
+    this.state = {
+      client: socket(),
+      rooms: null,
+    };
+
+    this.getRoomList = this.getRoomList.bind(this)
+
+    this.getRoomList();
+  }
+
+  getRoomList = () => {
+    this.state.client.getRooms((err, rooms) => {
+      this.setState({ rooms: rooms })
+    })
+  }
+
+  buildBrand = () => {
+      return (
+        <div className="header">
+          <a
+            href="#"
+            className=""
+          >
+            <div className="logo">
+              <img src={logo} className="App-logo" alt="logo" />
+            </div>
+            StoryPoints
+          </a>
         </div>
-        StoryPoints
-      </a>
-    </div>
-  );
-  
-  return (
-    <div className="sidebar">
-      {brand}
-      <Hidden implementation="css">
-        <Drawer
-          variant="temporary"
-          // anchor={props.rtlActive ? "left" : "right"}
-          // open={props.open}
-          // classes={{
-          //   paper: classNames(classes.drawerPaper, {
-          //     [classes.drawerPaperRTL]: props.rtlActive
-          //   })
-          // }}
-          // onClose={props.handleDrawerToggle}
-          ModalProps={{
-            keepMounted: true // Better open performance on mobile.
-          }}
-        >
+      )
+  }
 
-        
-          
-          <div className="">
-          
-          </div>
-          
-        </Drawer>
-      </Hidden>
-      <div className="sidebar__bg"></div>
-    </div>
-  );
-};
+  render() {
+      return (
+        <div className="sidebar">
+        {this.buildBrand()}
+        {
+          !this.state.rooms
+            ? 'Loading'
+            : (
+              <ul className="sidebar__list">
+                {
+                  this.state.rooms.map(room => (
+                    <li 
+                      key={room.name}
+                    >
+                      <img src={room.image}/>
+                      <span>{room.name}</span>
+                    </li>
+                  ))
+                }
+              </ul>
+            )
+        }
+        <div className="sidebar__bg"></div>
+      </div>
+      )
+  }
+}
 
 export default Sidebar;

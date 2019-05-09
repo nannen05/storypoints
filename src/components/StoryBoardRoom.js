@@ -6,6 +6,7 @@ import '../App.css';
 import * as actions from "../store/actions";
 import { withRouter } from 'react-router-dom'
 import { firebase } from '../firebase';
+import socket from './socket'
 
 class StoryBoardRoom extends Component {
   constructor(props) {
@@ -14,6 +15,7 @@ class StoryBoardRoom extends Component {
     this.state = {
       authUser: null,
       userCards: [],
+      client: socket(),
       //endpoint: "http://192.168.1.10:4001",
       endpoint: process.env.REACT_APP_HEROKU_URL || process.env.REACT_APP_CURRENT_IP,
       enpointPort: process.env.PORT || 4001
@@ -30,8 +32,10 @@ class StoryBoardRoom extends Component {
     //const socket = socketIOClient();
     //const socket = socketIOClient.connect(window.location.host + ':' + (process.env.PORT || 4001))
     //const socket = socketIOClient('https://protected-bastion-46350.herokuapp.com', {
-      const url = this.state.endpoint + ':' + this.state.enpointPort
+    //const url = this.state.endpoint + ':' + this.state.enpointPort
+    const url = 'http://127.0.0.1:3001'
     const socket = socketIOClient(url, {
+        forceNew: true,
         transports: ['websocket'], 
         jsonp: false 
       }); 
@@ -42,14 +46,16 @@ class StoryBoardRoom extends Component {
       console.log('connected to socket server'); 
     });
 
-    // socket.on('ADD_CARD', (card) => {
-    //       this.addCard(card)
+    socket.on('ADD_CARD', (card) => {
+          this.addCard(card)
+    })
+
+    // this.state.client.addCard((err, card) => {
+    //     this.addCard(card)
     // })
 
-    console.log(window.location.hostname + ':' + (process.env.PORT || 4001))
-
-    socket.on('RENDER_CARDS', (cards) => {
-        this.setState({userCards: cards})
+    this.state.client.renderCards((err, cards) => {
+        this.setState({ userCards: cards })
     })
   }
 
