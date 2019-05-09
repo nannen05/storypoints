@@ -24,11 +24,16 @@ export default function () {
     socket.emit('JOIN', storyRoomName, cb)
   }
 
+  function startTimer(time) {
+    socket.emit('START_TIMER', time)
+  }
+
   return {
     queryCard,
     updateCard,
     renderCards,
     getRooms,
-    join
+    join,
+    startTimer,
   }
 }

@@ -65,7 +65,7 @@ class Sidebar extends Component {
                     <li 
                       key={room.name}
                     >
-                      <Link to={`/story/${room.name}`}></Link>
+                      <Link to={`/story/${room.handle}`}></Link>
                       <img src={room.image}/>
                       <span>{room.name}</span>
                     </li>

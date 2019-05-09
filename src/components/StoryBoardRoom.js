@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
+import { Link, withRouter } from 'react-router-dom';
 import socketIOClient from "socket.io-client";
 import { connect } from "react-redux";
 import logo from '../logo.svg';
 import '../App.css';
 import * as actions from "../store/actions";
-import { withRouter } from 'react-router-dom'
 import { firebase } from '../firebase';
 import socket from './socket'
 
@@ -93,7 +93,7 @@ class StoryBoardRoom extends Component {
   }
 
   startTimer = () => {
-
+      this.state.client.startTimer(5000);
   }
 
   renderCards = () => {
@@ -131,6 +131,12 @@ class StoryBoardRoom extends Component {
             <p onClick={() => this.startTimer()}>
                 Start Timer<br/>
             </p>
+          </div>
+
+          <div className="btn">
+            <Link to={`/story/${this.props.room.handle}/card`}>
+              Go To Card
+            </Link>
           </div>
         </div>
       </div>

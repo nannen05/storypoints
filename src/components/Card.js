@@ -55,8 +55,6 @@ class UserCard extends Component {
       jsonp: false 
     }); 
 
-    console.log(url)
-
     socket.connect()
 
     socket.on('connect', () => { 
@@ -65,6 +63,13 @@ class UserCard extends Component {
 
     socket.on('CLEAR_USER_CARD', () => {
         this.setState({selectedCard: null });
+    })
+
+    socket.on('ALERT_TIMER', (time) => {
+      const message = `Please Select a Card in ${time}ms`
+      this.props.enqueueSnackbar(message, {
+        variant: 'warning',
+      });
     })
 
     setTimeout(() => {
@@ -143,7 +148,6 @@ class UserCard extends Component {
               {number}
             </Typography>
           </CardContent>
-
         </Card>
       )
   }
@@ -151,14 +155,7 @@ class UserCard extends Component {
   createCards = () => {
       return this.state.cards.map((number, index) =>
           this.simpleCard(number, index)
-        //<li key={index} onClick={() => this.selectCard(number)}>{number}</li>
       );
-  }
-
-  renderCards = () => {
-    return this.state.userCards.map((number, index) =>
-        <li key={index}>{number}</li>
-    );
   }
 
   createUpdateCardBtn = () => {
@@ -181,7 +178,7 @@ class UserCard extends Component {
     return (
       <div className="App">
         <div className="App-header">
-          <h2>Cards</h2>
+          <h2>{this.props.room.name} Card <br/> For {!this.state.authUser ? '' : this.state.authUser.email}</h2>
         </div>
 
         <div className="card">

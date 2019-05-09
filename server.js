@@ -31,12 +31,19 @@ mongo.connect(uri, {useNewUrlParser: true}, function(err, db){
 
     const { 
       handleGetRooms,
-      handleRenderCards 
+      handleRenderCards
     } = handlers(dbase);
 
     socket.on('GET_ROOMS', handleGetRooms);
 
     socket.on('RENDER_NEW_CARDS', handleRenderCards);
+
+    socket.on('START_TIMER', handleTimer)
+
+    function handleTimer(time) {
+      console.log('alert timer')
+      io.sockets.emit('ALERT_TIMER', time)
+    }
 
     const renderCards = () => {
       dbase.collection("cards").find().sort({userId: 1}).toArray(function(err, res) {

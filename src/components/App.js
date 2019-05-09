@@ -58,7 +58,7 @@ class App extends Component {
           client: socket(),
           rooms: null
       };
-      
+
       this.getRoomList = this.getRoomList.bind(this)
 
       this.getRoomList();
@@ -93,6 +93,12 @@ class App extends Component {
     //this.removeListener()
   }
 
+  renderStoryBoardCard(room, props) {
+      return (
+          <UserCard room={room}/>
+      )
+  }
+
   renderStoryBoardRoom(room, props) {
       return (
           <StoryBoardRoom room={room}/>
@@ -118,13 +124,24 @@ class App extends Component {
                         <PublicRoute authed={this.state.authed} path='/login' component={Login}/>
                         <PublicRoute authed={this.state.authed} path='/register' component={Register} />
                         <PrivateRoute authed={this.state.authed} path='/dashboard' component={Dashboard} />
-                        <Route path='/story/:team/card' component={UserCard}/>
                         {
                           this.state.rooms.map(room => (
                             <Route
                               key={room.name}
                               exact
-                              path={`/story/${room.name}`}
+                              path={`/story/${room.handle}/card`}
+                              render={
+                                props => this.renderStoryBoardCard(room, props)
+                              }
+                            />
+                          ))
+                        }
+                        {
+                          this.state.rooms.map(room => (
+                            <Route
+                              key={room.name}
+                              exact
+                              path={`/story/${room.handle}`}
                               render={
                                 props => this.renderStoryBoardRoom(room, props)
                               }
