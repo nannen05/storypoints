@@ -29,6 +29,7 @@ export default function () {
   }
 
   return {
+    socket,
     queryCard,
     updateCard,
     renderCards,

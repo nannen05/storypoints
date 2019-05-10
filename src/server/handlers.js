@@ -1,6 +1,12 @@
 const rooms = require('../config/storyboardrooms')
 
-module.exports = function(dbase) {
+module.exports = function(dbase, socket) {
+
+    function handleJoin(room, cb) {
+        socket.broadcast.to(room).emit('NEW_USER', null);
+        socket.join(room)
+        return cb(null, true)
+      }
 
     function handleGetRooms(_, cb) {
         return cb(null, rooms)
@@ -15,6 +21,7 @@ module.exports = function(dbase) {
     }
 
     return {
+        handleJoin,
         handleGetRooms,
         handleRenderCards
     }

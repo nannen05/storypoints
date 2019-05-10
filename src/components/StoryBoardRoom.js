@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import socketIOClient from "socket.io-client";
 import { connect } from "react-redux";
 import logo from '../logo.svg';
 import '../App.css';
 import * as actions from "../store/actions";
 import { firebase } from '../firebase';
+import { withSnackbar } from 'notistack';
 import socket from './socket'
 
 class StoryBoardRoom extends Component {
@@ -20,6 +22,8 @@ class StoryBoardRoom extends Component {
       endpoint: process.env.REACT_APP_HEROKU_URL || process.env.REACT_APP_CURRENT_IP,
       enpointPort: process.env.PORT || 4001
     };
+
+    this.joinRoom = this.joinRoom.bind(this)
   }
 
   componentDidMount() {
@@ -29,34 +33,21 @@ class StoryBoardRoom extends Component {
         : this.setState({ authUser: null });
     });
 
-    //const socket = socketIOClient();
-    //const socket = socketIOClient.connect(window.location.host + ':' + (process.env.PORT || 4001))
-    //const socket = socketIOClient('https://protected-bastion-46350.herokuapp.com', {
-    //const url = this.state.endpoint + ':' + this.state.enpointPort
-    const url = 'http://127.0.0.1:3001'
-    const socket = socketIOClient(url, {
-        forceNew: true,
-        transports: ['websocket'], 
-        jsonp: false 
-      }); 
-
-    socket.connect()
-
-    socket.on('connect', () => { 
-      console.log('connected to socket server'); 
-    });
-
-    socket.on('ADD_CARD', (card) => {
-          this.addCard(card)
+    this.state.client.socket.on('NEW_USER', (err) => {
+      const message = `New User Joined`
+      this.props.enqueueSnackbar(message, {
+        variant: 'warning',
+      });
     })
 
-    // this.state.client.addCard((err, card) => {
-    //     this.addCard(card)
-    // })
+    this.state.client.socket.on('ADD_CARD', (card) => {
+          this.addCard(card)
+    })
 
     this.state.client.renderCards((err, cards) => {
         this.setState({ userCards: cards })
     })
+
   }
 
   addCard = (card) => {
@@ -94,6 +85,16 @@ class StoryBoardRoom extends Component {
 
   startTimer = () => {
       this.state.client.startTimer(5000);
+  }
+
+  joinRoom = () => {
+      this.state.client.join(this.props.room.handle, (err, success) => {
+         if(err){
+            console.log(err);
+         }
+
+         this.props.history.push(`/story/${this.props.room.handle}/card`)
+      })    
   }
 
   renderCards = () => {
@@ -134,9 +135,9 @@ class StoryBoardRoom extends Component {
           </div>
 
           <div className="btn">
-            <Link to={`/story/${this.props.room.handle}/card`}>
-              Go To Card
-            </Link>
+            <button  onClick={() => this.joinRoom()}>
+              Join Room
+            </button>
           </div>
         </div>
       </div>
@@ -144,4 +145,8 @@ class StoryBoardRoom extends Component {
   }
 }
 
-export default withRouter(connect(null, actions)(StoryBoardRoom));
+StoryBoardRoom.propTypes = {
+  enqueueSnackbar: PropTypes.func.isRequired,
+}
+
+export default withRouter(connect(null, actions)(withSnackbar(StoryBoardRoom)));

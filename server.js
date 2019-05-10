@@ -27,18 +27,22 @@ mongo.connect(uri, {useNewUrlParser: true}, function(err, db){
   const dbase = db.db("storypoints_db");
 
   io.on('connection', socket => {
-    console.log('New client connected')
+    //console.log('New client connected')
 
     const { 
+      handleJoin,
       handleGetRooms,
       handleRenderCards
-    } = handlers(dbase);
+    } = handlers(dbase, socket);
+
+    socket.on('JOIN', handleJoin);
 
     socket.on('GET_ROOMS', handleGetRooms);
 
     socket.on('RENDER_NEW_CARDS', handleRenderCards);
 
     socket.on('START_TIMER', handleTimer)
+
 
     function handleTimer(time) {
       console.log('alert timer')
@@ -48,7 +52,7 @@ mongo.connect(uri, {useNewUrlParser: true}, function(err, db){
     const renderCards = () => {
       dbase.collection("cards").find().sort({userId: 1}).toArray(function(err, res) {
         if (err) throw err;
-        console.log(res);
+        //console.log(res);
         //io.sockets.emit('RENDER_CARDS', res)
       });
     }
