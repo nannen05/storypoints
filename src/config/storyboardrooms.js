@@ -18,5 +18,10 @@ module.exports = [
         name: 'Ollie Express',
         handle: 'ollie-express',
         image: 'https://cdn1.medicalnewstoday.com/content/images/articles/322/322868/golden-retriever-puppy.jpg'
+    },
+    {
+        name: 'Falkor',
+        handle: 'falkor',
+        image: 'https://cdn1.medicalnewstoday.com/content/images/articles/322/322868/golden-retriever-puppy.jpg'
     }
 ]

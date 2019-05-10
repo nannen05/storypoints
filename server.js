@@ -49,41 +49,15 @@ mongo.connect(uri, {useNewUrlParser: true}, function(err, db){
       io.sockets.emit('ALERT_TIMER', time)
     }
 
-    const renderCards = () => {
-      dbase.collection("cards").find().sort({userId: 1}).toArray(function(err, res) {
-        if (err) throw err;
-        //console.log(res);
-        //io.sockets.emit('RENDER_CARDS', res)
-      });
-    }
-
-    const sendCard = () => {
-      socket.on('SEND_CARD', (card) => {
-        dbase.collection("cards").insertOne(card, function(err, res) {
-          if (err) throw err;
-          io.sockets.emit('ADD_CARD', card)
-          renderCards()
-        });
-      })
-    }
-
     const updateCard = () => {
       socket.on('UPDATE_CARD', (card) => {
         const myQuery = { userId: card.userId };
         const newValue = { $set: {card: card.card} };
         dbase.collection("cards").updateOne(myQuery, newValue, function(err, res) {
           if (err) throw err;
-          renderCards()
+          //renderCards()
           io.sockets.emit('ADD_CARD', card) 
         });
-      })
-    }
-
-    const clearCards = () => {
-      socket.on('CLEAR_CARDS', () => {
-        dbase.collection("cards").deleteMany({}, function() {
-          io.sockets.emit('CLEAR_USER_CARD')
-        })
       })
     }
 
@@ -101,8 +75,14 @@ mongo.connect(uri, {useNewUrlParser: true}, function(err, db){
       })
     }
 
-    renderCards()
-    sendCard()
+    const clearCards = () => {
+      socket.on('CLEAR_CARDS', () => {
+        dbase.collection("cards").deleteMany({}, function() {
+          io.sockets.emit('CLEAR_USER_CARD')
+        })
+      })
+    }
+
     updateCard()
     clearCards()
     queryCard()

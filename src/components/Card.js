@@ -45,27 +45,15 @@ class UserCard extends Component {
         : this.setState({ authUser: null });
     });
 
-    //const socket = socketIOClient(window.location.hostname + ':' + (process.env.PORT || 4001));
-    //const socket = socketIOClient('https://protected-bastion-46350.herokuapp.com', {
-    //const url = this.state.endpoint + ':' + this.state.enpointPort
-    const url = 'http://127.0.0.1:3001'
-    const socket = socketIOClient(url, {
-      forceNew: true,
-      transports: ['websocket'], 
-      jsonp: false 
-    }); 
-
-    socket.connect()
-
-    socket.on('connect', () => { 
+    this.state.client.socket.on('connect', () => { 
       console.log('connected to socket server'); 
     });
 
-    socket.on('CLEAR_USER_CARD', () => {
+    this.state.client.socket.on('CLEAR_USER_CARD', () => {
         this.setState({selectedCard: null });
     })
 
-    socket.on('ALERT_TIMER', (time) => {
+    this.state.client.socket.on('ALERT_TIMER', (time) => {
       const message = `Please Select a Card in ${time}ms`
       this.props.enqueueSnackbar(message, {
         variant: 'warning',
@@ -79,7 +67,7 @@ class UserCard extends Component {
           userId: firebase.auth.currentUser.uid
         })
 
-        socket.on('ADD_CARD', (card) => {
+        this.state.client.socket.on('ADD_CARD', (card) => {
             this.setState({selectedCard: card.card})
         })
 
