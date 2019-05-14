@@ -1,4 +1,5 @@
 const express = require('express')
+const path = require('path');
 const http = require('http')
 const mongo = require('mongodb').MongoClient;
 const socketIO = require('socket.io')
@@ -15,13 +16,13 @@ const io = socketIO(server)
 const dbUser = process.env.REACT_APP_DB_USER
 const dbPassword = process.env.REACT_APP_DB_PASSWORD
 
-// app.set('view engine', 'ejs');
+app.set('view engine', 'ejs');
 
-// app.use(express.static(__dirname + '/public'));
+app.use(express.static(path.join(__dirname, 'build')));
 
-// app.get('/', function(req, res) {
-//     res.render('index');
-// });
+app.get('*', function(req, res) {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 
 console.log(process.env)
 

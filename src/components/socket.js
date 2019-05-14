@@ -11,7 +11,8 @@ if(process.env.PORT) {
 export default function () {
   console.log(portUrl)
   console.log(process.env)
-  const socket = io.connect(portUrl)
+  //const socket = io.connect(portUrl)
+  const socket = io.connect()
   
   function queryCard(cardInfo) {
     console.log('socket query')
