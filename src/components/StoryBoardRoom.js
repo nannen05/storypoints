@@ -76,8 +76,7 @@ class StoryBoardRoom extends Component {
   }
 
   clearCards = () => {
-    const socket = socketIOClient(window.location.hostname + ':4001');
-    socket.emit('CLEAR_CARDS')
+    this.state.client.socket.emit('CLEAR_CARDS')
     this.setState({
         userCards: []
     })
