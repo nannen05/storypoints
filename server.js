@@ -7,13 +7,21 @@ const handlers = require('./src/server/handlers')
 
 require('dotenv').config();
 
-const port = 3001
+const port = process.env.PORT || 3001;
 const app = express()
 const server = http.createServer(app)
 const io = socketIO(server)
 
 const dbUser = process.env.REACT_APP_DB_USER
 const dbPassword = process.env.REACT_APP_DB_PASSWORD
+
+app.set('view engine', 'ejs');
+
+app.use(express.static(__dirname + '/public'));
+
+app.get('/', function(req, res) {
+    res.render('index');
+});
 
 const uri = "mongodb+srv://" + dbUser + ":" + dbPassword + "@storypoints-6sx8y.mongodb.net/test?retryWrites=true";
 

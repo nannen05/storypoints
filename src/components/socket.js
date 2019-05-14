@@ -1,8 +1,16 @@
 import io from "socket.io-client";
 
-export default function () {
-  const socket = io.connect('http://127.0.0.1:3001')
+let portUrl;
 
+if(process.env.PORT) {
+  portUrl = `https://protected-bastion-46350.herokuapp.com/:${process.env.PORT}`
+} else {
+  portUrl = process.env.REACT_APP_CURRENT_URL
+}
+
+export default function () {
+  const socket = io.connect(portUrl)
+  
   function queryCard(cardInfo) {
     console.log('socket query')
     socket.emit('QUERY_CARD', cardInfo)
