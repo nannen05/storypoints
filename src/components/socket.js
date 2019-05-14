@@ -12,7 +12,7 @@ export default function () {
   console.log(portUrl)
   console.log(process.env)
   //const socket = io.connect(portUrl)
-  const socket = io.connect()
+  const socket = io.connect(process.env.REACT_APP_CURRENT_URL)
   
   function queryCard(cardInfo) {
     console.log('socket query')

@@ -1,3 +1,7 @@
+body {
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+}
+
 .App {
   text-align: center;
   display: flex;
@@ -353,6 +357,8 @@ button:hover {
 .card {
     width: 90%;
     margin: 0 auto;
+    width: calc(100vw - 260px);
+    max-width: 980px;
 }
 
 .card ul {
@@ -374,12 +380,12 @@ button:hover {
 
 .card__item--top {
     text-align: right;
-    padding: 0 0 75px;
+    padding: 0 0 60px;
 }
 
 .card__item--bottom {
     text-align: left;
-    padding: 75px 0 0;
+    padding: 60px 0 0;
 }
 
 .card__content {

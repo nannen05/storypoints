@@ -1,6 +1,6 @@
 import React, { Component, useState } from 'react';
+import styled from 'styled-components'
 import PropTypes from 'prop-types';
-import socketIOClient from "socket.io-client";
 import { connect } from "react-redux";
 import bvaLogo from '../bva.svg';
 import '../App.css';
@@ -17,6 +17,80 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
+const Header = styled.div`
+  display: flex;
+  flex-direction: column;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  width: calc(100vw - 260px);
+  flex-direction: row;
+  position: relative;
+  max-width: 820px;
+  font-family: "Roboto","Helvetica","Arial",sans-serif!important;
+  font-weight: 500;
+  padding: 0px 20px;
+  background: #FFF;
+  box-shadow: 0 1px 4px 0 rgba(0,0,0,0.14);
+  margin-bottom: 20px;
+  margin-top: 40px;
+  border-radius: 6px;
+`
+
+const Logo = styled.div`
+  padding: 20px 30px 20px;
+  border-radius: 3px;
+  background: linear-gradient(60deg, #ab47bc, #8e24aa);
+  box-shadow: 0 4px 20px 0 rgba(0, 0, 0,.14), 0 7px 10px -5px rgba(156, 39, 176,.4);
+  font-size: 1.4em;
+  font-weight: 300;
+  color: #fff;
+  transform: translateY(-20px);
+`
+
+const HeaderList = styled.div`
+  width: 70%;
+  display: flex;
+  height: 66px;
+  align-items: center;
+`
+
+const HeaderButton = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(60deg, #ab47bc, #8e24aa);
+  box-shadow: 0 4px 20px 0 rgba(0, 0, 0,.14), 0 7px 10px -5px rgba(156, 39, 176,.4);
+  color: #fff;
+  padding: 5px 20px;
+  border-radius: 3px;
+  margin: 0 10px;
+  cursor: pointer;
+  font-weight: 300;
+  text-transform: uppercase;
+  font-size: 14px;
+  letter-spacing: 0.25px;
+`
+
+const Footer = styled.div`
+  display: flex;
+  flex-direction: column;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  width: calc(100vw - 260px);
+  flex-direction: row;
+  position: relative;
+  max-width: 820px;
+  font-family: "Roboto","Helvetica","Arial",sans-serif!important;
+  font-weight: 500;
+  padding: 0px 20px;
+  background: #FFF;
+  box-shadow: 0 1px 4px 0 rgba(0,0,0,0.14);
+  margin-top: 20px;
+  border-radius: 6px;
+`
+
 class UserCard extends Component {
   constructor(props) {
     super(props);
@@ -28,11 +102,6 @@ class UserCard extends Component {
       selectedCard: localStorage.getItem('selectedCard'),
       client: socket(),
       updateCard: null,
-      currentSockets: null,
-      //endpoint: "http://192.168.1.10:4001",
-      //endpoint: "172.20.10.6:4001",
-      endpoint: process.env.REACT_APP_HEROKU_URL || process.env.REACT_APP_CURRENT_IP,
-      enpointPort: process.env.PORT || 3001
     };
 
     this.selectCard = this.selectCard.bind(this)
@@ -147,44 +216,44 @@ class UserCard extends Component {
   }
 
   createUpdateCardBtn = () => {
-    return <div className="btn">
-              <Button size="large" onClick={() => this.updateCard()}>
-                  Update Card
-              </Button>
-            </div>
+    return <HeaderButton onClick={() => this.updateCard()}>
+              Send Card
+           </HeaderButton>
   }
 
   createSendCardBtn = () => {
-    return <div className="btn">
-              <Button size="large" onClick={() => this.updateCard()}>
-                Send Card
-              </Button>
-          </div>
+    return <HeaderButton onClick={() => this.updateCard()}>
+            Send Card
+           </HeaderButton>
   }
 
   render() {
     return (
       <div className="App">
-        <div className="App-header">
-          <h2>{this.props.room.name} Card <br/> For {!this.state.authUser ? '' : this.state.authUser.email}</h2>
-        </div>
+
+        <Header>
+          <Logo>
+            {this.props.room.name} Card For {!this.state.authUser ? '' : this.state.authUser.email}
+          </Logo>
+        </Header>
 
         <div className="card">
           <ul className="card__list">{this.createCards()}</ul>
+        </div>
 
-          <div className="card__buttons">
-          {this.state.updateCard
+        <Footer>
+          <HeaderList>
+              {this.state.updateCard
                 ? this.createUpdateCardBtn()
                 : this.createSendCardBtn()
             }
 
-            <div className="btn">
-              <Button size="large" onClick={() => this.clearCard()}>
+            <HeaderButton onClick={() => this.clearCard()}> 
               Clear Card
-              </Button>
-            </div>    
-          </div>
-        </div>
+            </HeaderButton>
+          </HeaderList>
+        </Footer>
+
       </div>
     );
   }

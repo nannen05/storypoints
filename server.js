@@ -24,8 +24,6 @@ app.get('*', function(req, res) {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
-console.log(process.env)
-
 const uri = "mongodb+srv://" + dbUser + ":" + dbPassword + "@storypoints-6sx8y.mongodb.net/test?retryWrites=true";
 
 mongo.connect(uri, {useNewUrlParser: true}, function(err, db){
@@ -38,7 +36,8 @@ mongo.connect(uri, {useNewUrlParser: true}, function(err, db){
   const dbase = db.db("storypoints_db");
 
   io.on('connection', socket => {
-    //console.log('New client connected')
+    
+    console.log('New client connected')
 
     const { 
       handleJoin,

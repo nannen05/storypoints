@@ -15,13 +15,13 @@ module.exports = [
         image: 'https://media-cdn.tripadvisor.com/media/photo-s/0d/de/45/54/soft-shell-tacos.jpg'
     },
     {
-        name: 'Ollie Express',
-        handle: 'ollie-express',
+        name: 'Ollie',
+        handle: 'ollie',
         image: 'https://cdn1.medicalnewstoday.com/content/images/articles/322/322868/golden-retriever-puppy.jpg'
     },
     {
         name: 'Falkor',
         handle: 'falkor',
-        image: 'https://cdn1.medicalnewstoday.com/content/images/articles/322/322868/golden-retriever-puppy.jpg'
+        image: 'https://i.pinimg.com/236x/46/76/a1/4676a16c75a4fe5dd35ed1505d5847e6--the-neverending-story-dragons.jpg'
     }
 ]

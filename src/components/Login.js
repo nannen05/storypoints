@@ -43,8 +43,8 @@ class Login extends Component {
 
           firebase.auth.onAuthStateChanged(function(user) {
             if (user) {
-              alert('logged in')
-              history.push("/dashboard")
+              console.log('logged in');
+              history.push("/story/rambo")
             }
           })
 
