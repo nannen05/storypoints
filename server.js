@@ -15,13 +15,15 @@ const io = socketIO(server)
 const dbUser = process.env.REACT_APP_DB_USER
 const dbPassword = process.env.REACT_APP_DB_PASSWORD
 
-app.set('view engine', 'ejs');
+// app.set('view engine', 'ejs');
 
-app.use(express.static(__dirname + '/public'));
+// app.use(express.static(__dirname + '/public'));
 
-app.get('/', function(req, res) {
-    res.render('index');
-});
+// app.get('/', function(req, res) {
+//     res.render('index');
+// });
+
+console.log(process.env)
 
 const uri = "mongodb+srv://" + dbUser + ":" + dbPassword + "@storypoints-6sx8y.mongodb.net/test?retryWrites=true";
 
