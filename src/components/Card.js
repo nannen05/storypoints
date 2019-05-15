@@ -141,9 +141,9 @@ class UserCard extends Component {
           update: new Date().toTimeString()
         })
 
-        this.state.client.socket.on('ADD_CARD', (card) => {
-            this.setState({selectedCard: card.card})
-        })
+        // this.state.client.socket.on('ADD_CARD', (card) => {
+        //     this.setState({selectedCard: card.card})
+        // })
 
         console.log(this.state.selectedCard)
     }, 1000);

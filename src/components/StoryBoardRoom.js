@@ -191,21 +191,21 @@ class StoryBoardRoom extends Component {
 
     this.state.client.socket.on('NEW_USER', (err) => {
       console.log('Client Side New User')
-      const message = `New User Joined`
-      this.props.enqueueSnackbar(message, {
-        variant: 'warning',
-      });
+      // const message = `New User Joined`
+      // this.props.enqueueSnackbar(message, {
+      //   variant: 'warning',
+      // });
     })
 
     this.state.client.socket.on('ADD_CARD', (card) => {
           this.addCard(card)
 
-          const message = `${card.user} Changed Cards`
-          this.props.enqueueSnackbar(message, {
-            variant: 'success',
-          });
+          // const message = `${card.user} Changed Cards`
+          // this.props.enqueueSnackbar(message, {
+          //   variant: 'success',
+          // });
 
-          console.log(card)
+          // console.log(card)
     })
 
     this.state.client.renderCards((err, cards) => {
