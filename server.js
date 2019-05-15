@@ -41,18 +41,20 @@ mongo.connect(uri, {useNewUrlParser: true}, function(err, db){
 
     const { 
       handleJoin,
+      handleLeaveRoom,
       handleGetRooms,
       handleRenderCards
     } = handlers(dbase, socket);
 
     socket.on('JOIN', handleJoin);
 
+    socket.on('LEAVE_ROOM', handleLeaveRoom)
+
     socket.on('GET_ROOMS', handleGetRooms);
 
     socket.on('RENDER_NEW_CARDS', handleRenderCards);
 
     socket.on('START_TIMER', handleTimer)
-
 
     function handleTimer(time) {
       console.log('alert timer')
@@ -62,7 +64,7 @@ mongo.connect(uri, {useNewUrlParser: true}, function(err, db){
     const updateCard = () => {
       socket.on('UPDATE_CARD', (card) => {
         const myQuery = { userId: card.userId };
-        const newValue = { $set: {card: card.card} };
+        const newValue = { $set: {card: card.card, update: card.update} };
         dbase.collection("cards").updateOne(myQuery, newValue, function(err, res) {
           if (err) throw err;
           //renderCards()
@@ -75,11 +77,11 @@ mongo.connect(uri, {useNewUrlParser: true}, function(err, db){
       socket.on('QUERY_CARD', (card) => {
         console.log('query')
         const myQuery = { userId: card.userId };
-        const newValue = { $set: {card: card.card, userId: card.userId, user: card.user} };
+        const newValue = { $set: {card: card.card, userId: card.userId, user: card.user, update: card.update} };
 
         dbase.collection("cards").updateOne(myQuery, newValue, {upsert: true}, function(err, res) {
           if (err) throw err;
-          console.log('query')
+          console.log('query set')
           io.sockets.emit('ADD_CARD', card) 
         });
       })

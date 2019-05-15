@@ -120,6 +120,10 @@ class UserCard extends Component {
 
     this.state.client.socket.on('CLEAR_USER_CARD', () => {
         this.setState({selectedCard: null });
+        const message = `Please Select a new Card`
+        this.props.enqueueSnackbar(message, {
+          variant: 'warning',
+        });
     })
 
     this.state.client.socket.on('ALERT_TIMER', (time) => {
@@ -133,7 +137,8 @@ class UserCard extends Component {
         this.state.client.queryCard({
           card:this.state.selectedCard, 
           user: firebase.auth.currentUser.email, 
-          userId: firebase.auth.currentUser.uid
+          userId: firebase.auth.currentUser.uid,
+          update: new Date().toTimeString()
         })
 
         this.state.client.socket.on('ADD_CARD', (card) => {
@@ -181,7 +186,8 @@ class UserCard extends Component {
     this.state.client.updateCard({ 
       card:this.state.selectedCard, 
       user: firebase.auth.currentUser.email, 
-      userId: firebase.auth.currentUser.uid
+      userId: firebase.auth.currentUser.uid,
+      update: new Date().toTimeString()
     })
   }
 

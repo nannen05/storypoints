@@ -190,6 +190,7 @@ class StoryBoardRoom extends Component {
     });
 
     this.state.client.socket.on('NEW_USER', (err) => {
+      console.log('Client Side New User')
       const message = `New User Joined`
       this.props.enqueueSnackbar(message, {
         variant: 'warning',
@@ -228,6 +229,7 @@ class StoryBoardRoom extends Component {
         if(match.userId === card.userId) {
             let stateCopy = Object.assign({}, this.state);
             stateCopy.userCards[matchIndex].card = card.card;
+            stateCopy.userCards[matchIndex].update = card.update;
             this.setState(stateCopy);
          } else {
             this.setState({userCards: [...this.state.userCards, card]});
@@ -259,6 +261,16 @@ class StoryBoardRoom extends Component {
       })    
   }
 
+  leaveRoom = () => {
+      this.state.client.leave(this.props.room.handle, (err, success) => {
+        if(err){
+          console.log(err);
+       }
+
+       this.props.history.push(`/rooms`)
+      })
+  }
+
   renderCards = () => {
     const cards =  this.state.userCards.map((number, index) => {
         if(!!number.card) {
@@ -268,7 +280,7 @@ class StoryBoardRoom extends Component {
                       <CardEyebrow>Team Member</CardEyebrow>
                       <CardTitle>{number.user}</CardTitle>
                     </CardContent>
-                    <CardStatus>Last Updated: Now</CardStatus>
+                    <CardStatus>Last Updated: {number.update}</CardStatus>
                   </Card>
         }
       }       
@@ -314,6 +326,9 @@ class StoryBoardRoom extends Component {
               <Link to={`/rooms`}>
                 Back To Rooms
               </Link>
+            </HeaderButton>
+            <HeaderButton onClick={() => this.leaveRoom()}> 
+                Leave Room
             </HeaderButton>
           </HeaderList>
         </Footer>

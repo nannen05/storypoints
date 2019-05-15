@@ -35,6 +35,10 @@ export default function () {
     socket.emit('JOIN', storyRoomName, cb)
   }
 
+  function leave(storyRoomName, cb) {
+    socket.emit('LEAVE_ROOM', storyRoomName, cb)
+  }
+
   function startTimer(time) {
     socket.emit('START_TIMER', time)
   }
@@ -46,6 +50,7 @@ export default function () {
     renderCards,
     getRooms,
     join,
+    leave,
     startTimer,
   }
 }
