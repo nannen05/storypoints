@@ -11,6 +11,7 @@ import Login from "./Login";
 import UserCard from "./Card";
 import Register from "./Register";
 import Dashboard from "./Dashboard";
+import RoomList from "./RoomList";
 import StoryBoardRoom from './StoryBoardRoom';
 
 import SideBar from "./SideBar";
@@ -79,13 +80,13 @@ class App extends Component {
           authed: true,
           loading: false,
         })
-
-      } else {
-        this.setState({
-          authed: false,
-          loading: false
-        })
       }
+      // } else {
+      //   this.setState({
+      //     authed: false,
+      //     loading: false
+      //   })
+      // }
     })
   }
 
@@ -106,7 +107,7 @@ class App extends Component {
   }
    
   render() {
-    return this.props.loading === true ? <h1>Loading</h1> : (
+    return this.props.loading === true && this.props.authed ? <h1>Loading</h1> : (
       <SnackbarProvider maxSnack={3} 
         anchorOrigin={{
         vertical: 'top',
@@ -123,6 +124,7 @@ class App extends Component {
                         <Route exact path="/" component={Home}></Route>
                         <PublicRoute authed={this.state.authed} path='/login' component={Login}/>
                         <PublicRoute authed={this.state.authed} path='/register' component={Register} />
+                        <PrivateRoute authed={this.state.authed} path='/rooms' component={RoomList} />
                         <PrivateRoute authed={this.state.authed} path='/dashboard' component={Dashboard} />
                         {
                           this.state.rooms.map(room => (

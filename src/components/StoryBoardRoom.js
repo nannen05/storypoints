@@ -150,6 +150,25 @@ const CardStatus = styled.div`
   padding-top: 10px;
 `
 
+const Footer = styled.div`
+  display: flex;
+  flex-direction: column;
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  width: calc(100vw - 260px);
+  flex-direction: row;
+  position: relative;
+  max-width: 820px;
+  font-family: "Roboto","Helvetica","Arial",sans-serif!important;
+  font-weight: 500;
+  padding: 0px 20px;
+  background: #FFF;
+  box-shadow: 0 1px 4px 0 rgba(0,0,0,0.14);
+  margin-top: 20px;
+  border-radius: 6px;
+`
+
 class StoryBoardRoom extends Component {
   constructor(props) {
     super(props);
@@ -284,43 +303,20 @@ class StoryBoardRoom extends Component {
 
         <div>
         {this.state.userCards.length > 0
-             ? <CardList>{this.renderCards()}
-                <Card>
-                  <CardNumber>4</CardNumber>
-                  <CardContent>
-                    <CardEyebrow>Team Member</CardEyebrow>
-                    <CardTitle>Joe Pena</CardTitle>
-                  </CardContent>
-                  <CardStatus>Last Updated: Now</CardStatus>
-                </Card>
-                <Card>
-                  <CardNumber>8</CardNumber>
-                  <CardContent>
-                    <CardEyebrow>Team Member</CardEyebrow>
-                    <CardTitle>Linsey Salls</CardTitle>
-                  </CardContent>
-                  <CardStatus>Last Updated: Now</CardStatus>
-                </Card>
-                <Card>
-                  <CardNumber>?</CardNumber>
-                  <CardContent>
-                    <CardEyebrow>Team Member</CardEyebrow>
-                    <CardTitle>Sally Kay</CardTitle>
-                  </CardContent>
-                  <CardStatus>Last Updated: Now</CardStatus>
-                </Card>
-                <Card>
-                  <CardNumber>8</CardNumber>
-                  <CardContent>
-                    <CardEyebrow>Team Member</CardEyebrow>
-                    <CardTitle>Corey Burkhart</CardTitle>
-                  </CardContent>
-                  <CardStatus>Last Updated: Now</CardStatus>
-                </Card>
-               </CardList>
+             ? <CardList>{this.renderCards()}</CardList>
              : "Waiting For Users"
         }
         </div>
+
+        <Footer>
+          <HeaderList>
+            <HeaderButton> 
+              <Link to={`/rooms`}>
+                Back To Rooms
+              </Link>
+            </HeaderButton>
+          </HeaderList>
+        </Footer>
 
       </div>
     );

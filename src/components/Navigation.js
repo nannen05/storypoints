@@ -15,12 +15,13 @@ class NavigationAuth extends Component {
 
   signOut() {
     auth.doSignOut();
-    this.props.history.push('/')
+    this.props.history.push('/login')
   }
 
   render() {
     return(
         <div className="App-login">
+          <div className="btn"><Link to="/rooms"> Rooms </Link></div>
           <div className="btn"><Link to="/dashboard"> Dashboard </Link></div>
           <div className="btn signout" type="button" onClick={this.signOut.bind(this)}>
             Sign Out
