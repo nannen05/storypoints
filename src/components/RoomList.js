@@ -40,6 +40,19 @@ const Card = styled.div`
   margin: 20px 20px 40px;
 `
 
+const componentLink = ({ className, link }) => (
+    <Link className={className} to={link}></Link>
+
+)
+
+const CardLink = styled(componentLink)`
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  position: absolute;
+`
+
 const CardNumber = styled.div`
   width: 85px;
   padding: 20px 0;
@@ -53,8 +66,19 @@ const CardNumber = styled.div`
   color: #fff;
 `
 
+const Image = ({ className, img }) => (
+  <img className={className} src={img}/>
+);
+
+const CardImage = styled(Image)`
+  border-radius: 100%;
+  height: 50px;
+  object-fit: contain;
+  width: 50px;
+`
+
 const CardContent = styled.div`
-    text-align: right;
+  text-align: right;
 `
 
 const CardTitle = styled.div`
@@ -111,14 +135,15 @@ class RoomList extends Component {
     return <CardList>
             {this.state.rooms.map((room, index) => (
                 <Card key={index}>
-                    <Link to={`/story/${room.handle}`}>
-                        <CardNumber></CardNumber>
-                        <CardContent>
-                            <CardEyebrow>Room</CardEyebrow>
-                            <CardTitle>{room.name}</CardTitle>
-                        </CardContent>
-                        <CardStatus>Last Updated: Now</CardStatus>
-                    </Link>
+                    <CardLink className="link" link={`/story/${room.handle}`}></CardLink>
+                    <CardNumber>
+                      <CardImage className="image" img={room.image}></CardImage>
+                    </CardNumber>
+                    <CardContent>
+                        <CardEyebrow>Room</CardEyebrow>
+                        <CardTitle>{room.name}</CardTitle>
+                    </CardContent>
+                    <CardStatus>Last Updated: Now</CardStatus>
                 </Card>
             ))}
         </CardList>

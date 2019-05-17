@@ -38,6 +38,7 @@ mongo.connect(uri, {useNewUrlParser: true}, function(err, db){
   io.on('connection', socket => {
     
     console.log('New client connected')
+    console.log(io)
 
     const { 
       handleJoin,

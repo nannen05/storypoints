@@ -147,6 +147,8 @@ class UserCard extends Component {
 
         console.log(this.state.selectedCard)
     }, 1000);
+
+    console.log(this.props)
   }
 
   clearCard = () => {
@@ -233,6 +235,10 @@ class UserCard extends Component {
            </HeaderButton>
   }
 
+  backToRooom = () => {
+     this.props.history.push(`/story/${this.props.room.handle}`)
+  }
+
   render() {
     return (
       <div className="App">
@@ -256,6 +262,10 @@ class UserCard extends Component {
 
             <HeaderButton onClick={() => this.clearCard()}> 
               Clear Card
+            </HeaderButton>
+
+            <HeaderButton onClick={() => this.backToRooom()}> 
+              Back To Room
             </HeaderButton>
           </HeaderList>
         </Footer>
