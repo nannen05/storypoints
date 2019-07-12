@@ -10,5 +10,9 @@ export const doSignInWithEmailAndPassword = (email, password) =>
 
 // Sign out
 export const doSignOut = () => 
-  auth.signOut()
+  auth.signOut().then(function () {
+    console.log('user signed out')
+  }).catch(function(error) {
+    console.log(error)
+  })
 

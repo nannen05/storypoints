@@ -39,6 +39,10 @@ export default function () {
     socket.emit('LEAVE_ROOM', storyRoomName, cb)
   }
 
+  function latestRoomUpdate(storyRoomName, time) {
+    socket.emit('UPDATE_ROOM_TIME', storyRoomName, time)
+  }
+
   function startTimer(time) {
     socket.emit('START_TIMER', time)
   }
@@ -51,6 +55,7 @@ export default function () {
     getRooms,
     join,
     leave,
+    latestRoomUpdate,
     startTimer,
   }
 }

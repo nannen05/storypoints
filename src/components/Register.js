@@ -43,7 +43,7 @@ class Register extends Component {
             .then(() => {
               this.setState({ ...INITIAL_STATE });
               //history.push("/score/" + authUser.user.uid);
-              history.push('/dashboard')
+              //history.push('/dashboard')
             })
             .catch(error => {
               this.setState(byPropKey('error', error));
@@ -55,6 +55,20 @@ class Register extends Component {
 
       e.preventDefault();
   }
+
+  // onSubmit = event => {
+  //     this.props.firebase
+  //       .doSignInWithGoogle()
+  //       .then(socialAuthUser => {
+  //         this.setState(byPropKey('error', null));
+  //         this.props.history.push('/rooms');
+  //       })
+  //       .catch(error => {
+  //         this.setState(byPropKey('error', error));
+  //       });
+
+  //     event.preventDefault();
+  // };
 
   render() {
     const {
@@ -111,6 +125,12 @@ class Register extends Component {
 
           { error && <p>{error.message}</p> }
         </form>
+
+        <form onSubmit={this.onSubmit}>
+        <button type="submit">Sign In with Google</button>
+
+        {error && <p>{error.message}</p>}
+      </form>
         <div className="App-login">
           <div className="btn"><Link to="/login"> Login </Link></div>
           <div className="btn"><Link to="/"> Home </Link></div>

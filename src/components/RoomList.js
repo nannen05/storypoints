@@ -118,16 +118,26 @@ class RoomList extends Component {
     this.state = {
       client: socket(),
       rooms: null,
+      latestUpdate: null
     };
 
     this.getRoomList = this.getRoomList.bind(this)
-
-    this.getRoomList();
+    this.getNewestRoomUpdate = this.getNewestRoomUpdate.bind(this)
+    this.getRoomList()
+    this.getNewestRoomUpdate()
   }
 
   getRoomList = () => {
     this.state.client.getRooms((err, rooms) => {
       this.setState({ rooms: rooms })
+    })
+  }
+
+  getNewestRoomUpdate = () => {
+    this.state.client.socket.on('NEWEST_ROOM_TIME', (roomName, time) => {
+        this.setState({
+            latestUpdate: time,
+        })
     })
   }
 
@@ -143,7 +153,7 @@ class RoomList extends Component {
                         <CardEyebrow>Room</CardEyebrow>
                         <CardTitle>{room.name}</CardTitle>
                     </CardContent>
-                    <CardStatus>Last Updated: Now</CardStatus>
+                    <CardStatus>Last Updated: {this.state.latestUpdate}</CardStatus>
                 </Card>
             ))}
         </CardList>

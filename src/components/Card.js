@@ -136,6 +136,7 @@ class UserCard extends Component {
     setTimeout(() => {
         this.state.client.queryCard({
           card:this.state.selectedCard, 
+          room: this.props.room.handle,
           user: firebase.auth.currentUser.email, 
           userId: firebase.auth.currentUser.uid,
           update: new Date().toTimeString()
@@ -185,11 +186,14 @@ class UserCard extends Component {
 
     localStorage.setItem('selectedCard', this.state.selectedCard);
 
+    console.log('room', this.props.room.handle)
+
     this.state.client.updateCard({ 
       card:this.state.selectedCard, 
+      room: this.props.room.handle,
       user: firebase.auth.currentUser.email, 
       userId: firebase.auth.currentUser.uid,
-      update: new Date().toTimeString()
+      update: new Date()
     })
   }
 

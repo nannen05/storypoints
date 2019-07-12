@@ -38,15 +38,12 @@ class Sidebar extends Component {
   buildBrand = () => {
       return (
         <div className="header">
-          <a
-            href="#"
-            className=""
-          >
+        <Link to={`/`}>
             <div className="logo">
               <img src={logo} className="App-logo" alt="logo" />
             </div>
             StoryPoints
-          </a>
+          </Link>
         </div>
       )
   }

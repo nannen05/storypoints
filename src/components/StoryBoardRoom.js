@@ -200,10 +200,10 @@ class StoryBoardRoom extends Component {
     this.state.client.socket.on('ADD_CARD', (card) => {
           this.addCard(card)
 
-          // const message = `${card.user} Changed Cards`
-          // this.props.enqueueSnackbar(message, {
-          //   variant: 'success',
-          // });
+          const message = `${card.user} Changed Cards`
+          this.props.enqueueSnackbar(message, {
+            variant: 'success',
+          });
 
           // console.log(card)
     })
@@ -214,7 +214,24 @@ class StoryBoardRoom extends Component {
 
   }
 
+  latestRoomUpdate = () => {
+      let newestUpdate = ''
+
+      if(this.state.userCards.length > 1) {
+        let newestUpdateArray = this.state.userCards.sort(function(a, b) {
+          return a.update - b.update;
+        })
+        newestUpdate = newestUpdateArray[0].update
+      } else {
+        newestUpdate = this.state.userCards[0].update
+      }
+
+      this.state.client.latestRoomUpdate(this.props.room.name, newestUpdate)
+
+  }
+
   addCard = (card) => {
+    console.log(card)
     if(this.state.userCards.length > 0) {
         let match = ''
         let matchIndex = ''
@@ -238,10 +255,12 @@ class StoryBoardRoom extends Component {
       } else {
         this.setState({userCards: [...this.state.userCards, card]});
       }
+
+      //this.latestRoomUpdate()
   }
 
   clearCards = () => {
-    this.state.client.socket.emit('CLEAR_CARDS')
+    this.state.client.socket.emit('CLEAR_CARDS', this.props.room.handle)
     this.setState({
         userCards: []
     })
@@ -273,7 +292,7 @@ class StoryBoardRoom extends Component {
 
   renderCards = () => {
     const cards =  this.state.userCards.map((number, index) => {
-        if(!!number.card) {
+        if(!!number.card && this.props.room.handle == number.room) {
           return <Card key={index}>
                     <CardNumber>{number.card}</CardNumber>
                     <CardContent>
@@ -316,7 +335,7 @@ class StoryBoardRoom extends Component {
         <div>
         {this.state.userCards.length > 0
              ? <CardList>{this.renderCards()}</CardList>
-             : "Waiting For Users"
+             : "Waiting For Users..."
         }
         </div>
 

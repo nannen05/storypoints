@@ -18,7 +18,6 @@ class DashBoard extends Component {
 
     signOut() {
         auth.doSignOut();
-        alert('signed out')
         this.props.history.push('/')
     }
 

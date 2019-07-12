@@ -28,6 +28,7 @@ const uri = "mongodb+srv://" + dbUser + ":" + dbPassword + "@storypoints-6sx8y.m
 
 mongo.connect(uri, {useNewUrlParser: true}, function(err, db){
     if(err){
+      console.log(err)
       throw err;
   }
 
@@ -38,7 +39,7 @@ mongo.connect(uri, {useNewUrlParser: true}, function(err, db){
   io.on('connection', socket => {
     
     console.log('New client connected')
-    console.log(io)
+    //console.log(io)
 
     const { 
       handleJoin,
@@ -64,39 +65,58 @@ mongo.connect(uri, {useNewUrlParser: true}, function(err, db){
 
     const updateCard = () => {
       socket.on('UPDATE_CARD', (card) => {
-        const myQuery = { userId: card.userId };
-        const newValue = { $set: {card: card.card, update: card.update} };
+        const myQuery = { userId: card.userId, room: card.room };
+        const newValue = { $set: {card: card.card, update: card.update, room: card.room} };
         dbase.collection("cards").updateOne(myQuery, newValue, function(err, res) {
           if (err) throw err;
-          //renderCards()
           io.sockets.emit('ADD_CARD', card) 
         });
+
+        // dbase.collection(card.room).updateOne(myQuery, newValue, function(err, res) {
+        //   if (err) throw err;
+        //   //io.sockets.emit('ADD_CARD', card) 
+        // });
       })
+    }
+
+    const updateRoomTime = () => {
+        socket.on('UPDATE_ROOM_TIME', (storyRoomName, time) => {
+            console.log(storyRoomName, time)
+            io.sockets.emit('NEWEST_ROOM_TIME', storyRoomName, time)
+        })
     }
 
     const queryCard = () => {
       socket.on('QUERY_CARD', (card) => {
-        console.log('query')
-        const myQuery = { userId: card.userId };
-        const newValue = { $set: {card: card.card, userId: card.userId, user: card.user, update: card.update} };
+        console.log(card)
+        const myQuery = { userId: card.userId, room: card.room };
+        const newValue = { $set: {card: card.card, userId: card.userId, user: card.user, update: card.update, room: card.room} };
 
         dbase.collection("cards").updateOne(myQuery, newValue, {upsert: true}, function(err, res) {
           if (err) throw err;
           console.log('query set')
           io.sockets.emit('ADD_CARD', card) 
         });
+
+        // dbase.collection(card.room).updateOne(myQuery, newValue, {upsert: true}, function(err, res) {
+        //   if (err) throw err;
+        //   //io.sockets.emit('ADD_CARD', card) 
+        // });
       })
     }
 
     const clearCards = () => {
-      socket.on('CLEAR_CARDS', () => {
-        dbase.collection("cards").deleteMany({}, function() {
+      socket.on('CLEAR_CARDS', (roomName) => {
+        const myQuery = {room: roomName}
+
+        dbase.collection("cards").deleteMany(myQuery, function() {
           io.sockets.emit('CLEAR_USER_CARD')
         })
       })
     }
 
     updateCard()
+    updateRoomTime()
     clearCards()
     queryCard()
   
