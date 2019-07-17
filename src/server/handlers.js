@@ -1,18 +1,22 @@
 const rooms = require('../config/storyboardrooms')
 
-module.exports = function(dbase, socket) {
+module.exports = function(dbase, socket, io) {
 
     function handleJoin(room, cb) {
         console.log('New User')
-        socket.broadcast.to(room).emit('NEW_USER', null);
         socket.join(room)
+        io.sockets.in(room).emit('NEW_USER', null);
         return cb(null, true)
     }
 
     function handleLeaveRoom(room, cb) {
         console.log('User Left Room')
-        socket.broadcast.to(room).emit('USER_LEFT', null);
-        socket.leave(room)
+        io.sockets.in(room).emit('USER_LEFT', null);
+        socket.leave(room, function (err) {
+            console.log(err); // display null
+            console.log(socket.adapter.rooms);  // display the same list of rooms the specified room is still there
+         });
+        
         return cb(null, true)
     }
 
@@ -23,7 +27,7 @@ module.exports = function(dbase, socket) {
     function handleRenderCards(_, cb) {
         dbase.collection("cards").find().sort({userId: 1}).toArray(function(err, res) {
             if (err) throw err;
-            console.log(res);
+            //console.log('renderCards', res);
             return cb(null, res)
         });
     }

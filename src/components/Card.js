@@ -139,7 +139,7 @@ class UserCard extends Component {
           room: this.props.room.handle,
           user: firebase.auth.currentUser.email, 
           userId: firebase.auth.currentUser.uid,
-          update: new Date().toTimeString()
+          update: new Date().toLocaleString("en-us")
         })
 
         // this.state.client.socket.on('ADD_CARD', (card) => {
@@ -193,7 +193,7 @@ class UserCard extends Component {
       room: this.props.room.handle,
       user: firebase.auth.currentUser.email, 
       userId: firebase.auth.currentUser.uid,
-      update: new Date()
+      update: new Date().toLocaleString("en-us")
     })
   }
 

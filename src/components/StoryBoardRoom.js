@@ -169,6 +169,8 @@ const Footer = styled.div`
   border-radius: 6px;
 `
 
+const days = new Array("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday");
+
 class StoryBoardRoom extends Component {
   constructor(props) {
     super(props);
@@ -191,21 +193,34 @@ class StoryBoardRoom extends Component {
 
     this.state.client.socket.on('NEW_USER', (err) => {
       console.log('Client Side New User')
-      // const message = `New User Joined`
-      // this.props.enqueueSnackbar(message, {
-      //   variant: 'warning',
-      // });
+      const message = `New User Joined`
+      this.props.enqueueSnackbar(message, {
+        preventDuplicate: true,
+        variant: 'warning',
+      });
+    })
+
+    this.state.client.socket.on('USER_LEFT', (err) => {
+      console.log('Client Side User Left')
+      const message = `User Left`
+      this.props.enqueueSnackbar(message, {
+        preventDuplicate: true,
+        variant: 'warning',
+      });
     })
 
     this.state.client.socket.on('ADD_CARD', (card) => {
           this.addCard(card)
+    })
 
-          const message = `${card.user} Changed Cards`
-          this.props.enqueueSnackbar(message, {
-            variant: 'success',
-          });
-
-          // console.log(card)
+    this.state.client.socket.on('USER_CHANGED_CARD', (card) => {
+      if(this.props.room.handle == card.room) {
+        const message = `${card.user} Changed Cards`
+        this.props.enqueueSnackbar(message, {
+          preventDuplicate: true,
+          variant: 'success',
+        });
+      }
     })
 
     this.state.client.renderCards((err, cards) => {
@@ -231,7 +246,6 @@ class StoryBoardRoom extends Component {
   }
 
   addCard = (card) => {
-    console.log(card)
     if(this.state.userCards.length > 0) {
         let match = ''
         let matchIndex = ''
@@ -254,9 +268,13 @@ class StoryBoardRoom extends Component {
          
       } else {
         this.setState({userCards: [...this.state.userCards, card]});
+        console.log(this.state.userCards)
       }
 
       //this.latestRoomUpdate()
+      this.state.client.renderCards((err, cards) => {
+        this.setState({ userCards: cards })
+      })
   }
 
   clearCards = () => {
@@ -267,7 +285,7 @@ class StoryBoardRoom extends Component {
   }
 
   startTimer = () => {
-      this.state.client.startTimer(5000);
+      this.state.client.startTimer(5000, this.props.room.handle);
   }
 
   joinRoom = () => {
@@ -275,6 +293,8 @@ class StoryBoardRoom extends Component {
          if(err){
             console.log(err);
          }
+
+         console.log(success)
 
          this.props.history.push(`/story/${this.props.room.handle}/card`)
       })    
@@ -299,7 +319,7 @@ class StoryBoardRoom extends Component {
                       <CardEyebrow>Team Member</CardEyebrow>
                       <CardTitle>{number.user}</CardTitle>
                     </CardContent>
-                    <CardStatus>Last Updated: {number.update}</CardStatus>
+                    <CardStatus>Last Updated: {`${number.update}`}</CardStatus>
                   </Card>
         }
       }       

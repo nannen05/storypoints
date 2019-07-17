@@ -46,7 +46,7 @@ mongo.connect(uri, {useNewUrlParser: true}, function(err, db){
       handleLeaveRoom,
       handleGetRooms,
       handleRenderCards
-    } = handlers(dbase, socket);
+    } = handlers(dbase, socket, io);
 
     socket.on('JOIN', handleJoin);
 
@@ -64,18 +64,15 @@ mongo.connect(uri, {useNewUrlParser: true}, function(err, db){
     }
 
     const updateCard = () => {
-      socket.on('UPDATE_CARD', (card) => {
+      socket.on('UPDATE_CARD', (card, room) => {
         const myQuery = { userId: card.userId, room: card.room };
         const newValue = { $set: {card: card.card, update: card.update, room: card.room} };
         dbase.collection("cards").updateOne(myQuery, newValue, function(err, res) {
           if (err) throw err;
           io.sockets.emit('ADD_CARD', card) 
+          io.sockets.in(card.room).emit('USER_CHANGED_CARD', card)
+          console.log('rooms', io.sockets.adapter.rooms)
         });
-
-        // dbase.collection(card.room).updateOne(myQuery, newValue, function(err, res) {
-        //   if (err) throw err;
-        //   //io.sockets.emit('ADD_CARD', card) 
-        // });
       })
     }
 
@@ -110,7 +107,8 @@ mongo.connect(uri, {useNewUrlParser: true}, function(err, db){
         const myQuery = {room: roomName}
 
         dbase.collection("cards").deleteMany(myQuery, function() {
-          io.sockets.emit('CLEAR_USER_CARD')
+          io.sockets.in(roomName).emit('CLEAR_USER_CARD')
+          io.sockets.in(roomName).emit('RERENDER_CARDS')
         })
       })
     }
